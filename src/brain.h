@@ -18,6 +18,9 @@ typedef struct {
     int16_t* cognition_n;   /* Genome, cognition neuron pathways */
     int cognition_len;
 
+    int16_t* motor_n;       /* Genome, active motor neurons */
+    int motor_len;
+
     /* world realitive data */
     int x_pos;
     int y_pos;
@@ -27,6 +30,5 @@ typedef struct {
 } brain;
 
 void brain_react( brain* br, environment* env );
-
 
 #endif
