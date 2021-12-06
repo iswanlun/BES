@@ -20,12 +20,6 @@ void wipe_buffers( brain* br ) {
     }
 }
 
-/* Cognition neurons are allowed to form connections between each
- * other and to form circular connections. Warming these neurons
- * allows lateral signaling befor they are fired towards motor
- * neurons */
-
-
 void fire_sense_neurons( brain* br, environment* env ) {
 
     for ( int i = 0; i < br->sense_len; ++i ) {

@@ -24,8 +24,9 @@ typedef struct {
     /* world realitive data */
     int x_pos;
     int y_pos;
-    // direction brain points in ( N-S-E-W )
-    // age, sex, etc (?)
+    
+    /* direction */
+    char dir;
 
 } brain;
 

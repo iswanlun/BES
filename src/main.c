@@ -30,7 +30,6 @@ int main( int argc, char** argv ) {
         env_regenerate( env );
 
         /* Add record of generation */
-
     }
 
     /* preform shutdown */

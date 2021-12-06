@@ -5,7 +5,7 @@
 #include "brain.h"
 #include <stdint.h>
 
-#define SENSE_COUNT 3
+#define SENSE_COUNT 5
 #define COGNITION_COUNT 3
 #define MOTOR_COUNT 3
 
