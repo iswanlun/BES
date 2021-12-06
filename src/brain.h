@@ -12,10 +12,10 @@ typedef struct {
     int cognition_input[COGNITION_COUNT];
     int motor_input[MOTOR_COUNT];
 
-    int32_t* sense_n;       /* Genome, sense neuron pathways */
+    int16_t* sense_n;       /* Genome, sense neuron pathways */
     int sense_len;
 
-    int32_t* cognition_n;   /* Genome, cognition neuron pathways */
+    int16_t* cognition_n;   /* Genome, cognition neuron pathways */
     int cognition_len;
 
     /* world realitive data */

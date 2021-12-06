@@ -1,6 +1,13 @@
 #include "brain.h"
 #include "neurons.h"
 
+#define IN(x)       ( ( x >> 10) & 0x1F )
+#define OUT(x)      ( ( x >> 4 ) & 0x1F )
+#define WEIGHT(x)   ( (int8_t) (((x & 0x8) << 4) | (x & 0x7)) )
+
+#define IN_DEST(x)  ( x >> 15 )
+#define OUT_DEST(x) ( (x >> 9 ) & 0x1 )
+
 void wipe_sense_buffer( brain* br );
 void wipe_cognition_buffer( brain* br );
 void wipe_motor_buffer( brain* br );
@@ -9,30 +16,56 @@ void wipe_motor_buffer( brain* br );
  * other and to form circular connections. Warming these neurons
  * allows lateral signaling befor they are fired towards motor
  * neurons */
-void warm_cognition_neurons( brain* br );
+
+
+void fire_sense_neurons( brain* br, environment* env ) {
+
+    for ( int i = 0; i < br->sense_len; ++i ) {
+
+        int16_t g = br->sense_n[i];
+
+
+    }
+
+}
+
+void warm_cognition_neurons( brain* br ) {
+
+    for ( int i = 0; i < br->cognition_len; ++i ) {
+
+        int16_t g = br->cognition_n[i];
+        
+        if ( !OUT_DEST(g) ) {
+        
+            int8_t in = IN(g) % COGNITION_COUNT;
+            int8_t out = OUT(g) % COGNITION_COUNT;
+            int8_t weight = WEIGHT(g);
+
+            br->cognition_input[ out ] += ( weight * neuron_cognition( br->cognition_input[ in ] ) );
+        }   
+    }
+}
 
 void fire_cognition_neurons( brain* br ) {
 
     for ( int i = 0; i < br->cognition_len; ++i ) {
 
-        int32_t v = br->cognition_n[i];
+        int16_t g = br->cognition_n[i];
+        
+        if ( OUT_DEST(g) ) {
+        
+            int8_t in = IN(g) % COGNITION_COUNT;
+            int8_t out = OUT(g) % MOTOR_COUNT;
+            int8_t weight = WEIGHT(g);
 
-        int8_t in = v >> 24;
-        int8_t out = v >> 16;
-        int8_t weight = ( v & 0xFF );
-
-        if ( (out >> 6) == 0x2 ) {
-
-            br->motor_input[ out & 0x3F ] += ( weight * neuron_cognition( br->cognition_input[ in ] ) );
-
-        }
+            br->motor_input[ out ] += ( weight * neuron_cognition( br->cognition_input[ in ] ) );
+        }   
     }
-
-
 }
 
-void fire_sense_neurons( brain* br, environment* env );
-void fire_motor_neurons( brain* br, environment* env );
+void fire_motor_neurons( brain* br, environment* env ) {
+
+}
 
 void brain_react( brain* br, environment* env ) {
 
