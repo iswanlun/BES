@@ -14,9 +14,18 @@ typedef struct {
 
     brain* occupant; /* occupant */
 
-    char survive; /* spatial selection criteria bool ( 0, 1 ) */
-
     // mutex
+
+    /* sector data */
+    char survive; /* spatial selection criteria bool ( 0, 1 ) */
+    char temp; /* 0 - 256 */
+    int temp_vector; /* direction of heat source, degrees */
+
+    char light; /* 0 - 256 */
+    int light_vector /* direction of light source, degrees */
+
+    // radiation
+
 
 } sector;
 
@@ -34,11 +43,8 @@ typedef struct {
     /* population */
     int population;
     
-    /* world data, might refactor to be in sectors */
-    // temperature
-    // lighting
-    // radiation
-    // food sources (?)
+
+
 
 } environment;
 
