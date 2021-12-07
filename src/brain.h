@@ -26,7 +26,7 @@ typedef struct {
     uint32_t* cognition_n;   /* Genome, cognition neuron pathways */
     int cognition_len;
 
-    /* world realitive data */
+    /* world realitive data */  
     int x_pos;
     int y_pos;
     

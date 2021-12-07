@@ -1,7 +1,10 @@
 #include <stdlib.h>
+#include <string.h>
 #include "spawn.h"
 #include "rand.h"
 #include "neurons.h"
+
+#define MUTATION_FEQ 1000
 
 /* Remap the gene indices from 128 values to set limits  */
 #define TRIM(g, i, o) ( ( (((g >> 24) & 0x7F) % i) << 24 ) | \
@@ -73,10 +76,32 @@ brain* spawn_new( int genome_size ) {
 
 brain* spawn_breed( brain* parent ) {
 
-    
+    brain* br = (brain*) calloc( 1, sizeof(brain) );
+    br->raw_genome = (uint32_t*) calloc( parent->raw_genome_len, sizeof(uint32_t) );
+
+    br->raw_genome_len = parent->raw_genome_len;
+
+    memcpy( br->raw_genome, parent->raw_genome, ( parent->raw_genome_len * sizeof( uint32_t ) ) );
+
+    if ( ( rand_next( 1 ) % MUTATION_FEQ ) == 0 ) {
+
+        int steps = rand_next( 1 ) % parent->raw_genome_len;
+        int shift = rand_next( 1 ) % 32;
+
+        br->raw_genome[steps] ^= (1 << shift); /* bit flip mutation */
+    }
+    return br;
 }
 
-void spawn_remove( brain* eol ) {
+void spawn_remove( brain* br ) {
 
+    free( br->raw_genome );
+    free( br->sense_n );
+    free( br->cognition_n );
 
+    br->raw_genome = NULL;
+    br->sense_n = NULL;
+    br->cognition_n = NULL;
+
+    free( br );
 }
