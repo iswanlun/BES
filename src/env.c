@@ -7,15 +7,16 @@ void env_disperse( environment* env ) {
 
     /* TODO: Randomly distribute brains in brain list into grid */
 
-    for (int i = 0; i <  env->population; ++i ) {
+    for (int i = 0; i < env->population; ++i ) {
 
         uint32_t xy = rand_next( 1 );
         uint16_t x = ( ( xy >> 16 ) % env->x_dim );
         uint16_t y = ( ( xy & 0xFFFF ) % env->y_dim );
+        env->brains[i]->dir = xy % 4;
 
         while ( env->grid[x][y].occupant != NULL ) {
             x = ( (x + 2) % env->x_dim );
-            y = ( (y + 3) % env->y_dim );
+            y = ( (y + 1) % env->y_dim );
         }
 
         env->brains[i]->x_pos = x;

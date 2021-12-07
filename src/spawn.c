@@ -11,6 +11,8 @@
                         ( (((g >> 16) & 0x7F) % o) << 16 ) | \
                         ( g & 0x8080FFFF ) )
 
+/* Given a set of raw genes, creates and sets up a series
+ * interal brain buffers to hold simulation usable versions. */
 void spawn_create_pathways( brain* br ) {
 
     br->cognition_len = 0;
@@ -47,6 +49,7 @@ void spawn_create_pathways( brain* br ) {
             }
             
         } else {                        /* Sense source */
+
             if ( OUT_SRC( gene) ) {     /* motor out */
                 br->cognition_n[sense_index++] = TRIM( gene, SENSE_COUNT, MOTOR_COUNT );
 
