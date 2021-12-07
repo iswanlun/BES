@@ -40,9 +40,9 @@ unsigned int neuron_sense( environment* env, brain* br, int8_t gene_index ) {
 unsigned int neuron_cognition( int8_t gene_index, int input ) {
 
     switch( gene_index ) {
-        case( 0x1 ): return small_neuron( input );
-        case( 0x2 ): return medium_neuron( input );
-        case( 0x3 ): return large_neuron( input );
+        case( 0x0 ): return small_neuron( input );
+        case( 0x1 ): return medium_neuron( input );
+        case( 0x2 ): return large_neuron( input );
     }
     return 0;
 }
@@ -51,9 +51,9 @@ unsigned int neuron_cognition( int8_t gene_index, int input ) {
 void neuron_motor( environment* env, brain* br, int8_t gene_index, int input ) {
 
     switch( gene_index ) {
-        case( 0x1 ): return move_forward_back( env, br, input );
-        case( 0x2 ): return move_right_left( env, br, input );
-        case( 0x3 ): return move_random( env, br, input );
+        case( 0x0 ): return move_forward_back( env, br, input );
+        case( 0x1 ): return move_right_left( env, br, input );
+        case( 0x2 ): return move_random( env, br, input );
     }
     return 0;
 }

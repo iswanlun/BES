@@ -1,11 +1,27 @@
 #include <stdlib.h>
 #include "env.h"
 #include "spawn.h"
+#include "rand.h"
 
 void env_disperse( environment* env ) {
 
     /* TODO: Randomly distribute brains in brain list into grid */
 
+    for (int i = 0; i <  env->population; ++i ) {
+
+        uint32_t xy = rand_next( 1 );
+        uint16_t x = ( ( xy >> 16 ) % env->x_dim );
+        uint16_t y = ( ( xy & 0xFFFF ) % env->y_dim );
+
+        while ( env->grid[x][y].occupant != NULL ) {
+            x = ( (x + 2) % env->x_dim );
+            y = ( (y + 3) % env->y_dim );
+        }
+
+        env->brains[i]->x_pos = x;
+        env->brains[i]->y_pos = y;
+        env->grid[x][y].occupant = env->brains[i];
+    }
 }
 
 environment* env_new( int x_dim, int y_dim ) {
@@ -108,7 +124,6 @@ void env_regenerate( environment* env ) {
 void env_run_iterations( environment* env, int iters ) {
 
     for ( int i = 0; i < iters; ++i ) {
-
         for ( int b = 0; b < env->population; ++b ) {
             brain_react( env->brains[b], env );
         }
@@ -122,11 +137,10 @@ void env_cleanup( environment* env ) {
         spawn_remove( env->brains[i] );
         env->brains[i] = NULL;
     }
+    free( env->brains );
 
     for ( int x = 0; x < env->x_dim; ++x ) {
         free( env->grid[x] );
     }
-
-    free( env-> grid );
-
+    free( env->grid );
 }
