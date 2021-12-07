@@ -8,11 +8,11 @@ char east_selection( int x_dim, int y_dim ) {
 
 int main( int argc, char** argv ) {
 
-    int generations, iterations, width, length, population;
+    int generations, iterations, width, length, population, genome_size;
 
     /* preform setup */
     environment* env = env_new( width, length );
-    env_populate( env, population );
+    env_populate( env, population, genome_size );
     env_select( env, &east_selection );
 
     for ( int i = 0; i < generations; ++i ) {
@@ -21,11 +21,7 @@ int main( int argc, char** argv ) {
 
         env_run_iterations( env, iterations );
 
-        /* perform natural selection */
-
-        env_cull( env );
-
-        /* breed new generation, setup next environment */
+        /* perform natural selection and breed new generation, setup next environment */
 
         env_regenerate( env );
 
@@ -33,7 +29,7 @@ int main( int argc, char** argv ) {
     }
 
     /* preform shutdown */
-
+    env_cleanup( env );
 
     return 0;
 }

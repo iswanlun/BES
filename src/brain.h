@@ -12,6 +12,9 @@ typedef struct {
     float cognition_input[COGNITION_COUNT];
     float motor_input[MOTOR_COUNT];
 
+    int32_t* raw_genome; /* Raw genome with full variations */
+    int raw_genome_length;
+
     int32_t* sense_n;       /* Genome, sense neuron pathways */
     int sense_len;
 

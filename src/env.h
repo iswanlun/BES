@@ -17,43 +17,40 @@ typedef struct {
     // mutex
 
     /* sector data */
-    char survive; /* spatial selection criteria bool ( 0, 1 ) */
+    char survive; /* sector selection criteria bool ( 0, 1 ) */
+
     char temp; /* 0 - 256 */
     int temp_vector; /* direction of heat source, degrees */
 
     char light; /* 0 - 256 */
-    int light_vector /* direction of light source, degrees */
+    int light_vector; /* direction of light source, degrees */
 
-    // radiation
-
+    char radiation; /* 0 - 256 */
+    int radition_vector; /* direction of radiation source */
 
 } sector;
 
 typedef struct {
 
     /* 2d world grid */
-    sector** env;
-
+    sector** grid;
     int x_dim;
     int y_dim;
 
     /* list of all brains in env */
-    brain* brains;
+    brain** brains;
 
     /* population */
     int population;
-    
-
-
 
 } environment;
 
 /* create a new environment */
-environment* env_new( int width, int length );
+environment* env_new( int x_dim, int y_dim );
 
 /* populate the environment initally with new brains created at random
  * and disperse them throughout the env randomly */
-void env_populate( environment* env, int pop );
+void env_populate( environment* env, int pop, int genome_size );
 
 /* apply a selection criteria realitive to world,
  * pointer to fuction which takes in coordinates and returns true / false
@@ -62,8 +59,8 @@ void env_select( environment* env, char (*select)(int, int) );
 
 /* Differs from select in that select applies a sections criteria to individual
  * sectors, where as cull removes brains in non-surviving sectors. 
- * Culling removes brains from memory. */
-void env_cull( environment* env );
+ * Culling removes brains from memory. Returns the number of survivors. */
+int env_cull( environment* env );
 
 /* Repopulate an environment after culling */
 void env_regenerate( environment* env );
@@ -71,5 +68,8 @@ void env_regenerate( environment* env );
 /* Runs the selected number of iterations constituting a single generation
  * or sub generation */
 void env_run_iterations( environment* env, int iters );
+
+/* Free env and brain resources */
+void env_cleanup( environment* env );
 
 #endif
