@@ -12,7 +12,7 @@ void env_disperse( environment* env ) {
         uint32_t xy = rand_next( 1 );
         uint16_t x = ( ( xy >> 16 ) % env->x_dim );
         uint16_t y = ( ( xy & 0xFFFF ) % env->y_dim );
-        env->brains[i]->dir = xy % 4;
+        env->brains[i]->dir = ( xy % 4 ) * 90;
 
         while ( env->grid[x][y].occupant != NULL ) {
             x = ( (x + 2) % env->x_dim );

@@ -19,13 +19,13 @@ typedef struct {
     /* sector data */
     char survive; /* sector selection criteria bool ( 0, 1 ) */
 
-    char temp; /* 0 - 256 */
+    signed char temp; /* -1 - 0 */
     int temp_vector; /* direction of heat source, degrees */
 
-    char light; /* 0 - 256 */
+    signed char light; /* -1 - 0 */
     int light_vector; /* direction of light source, degrees */
 
-    char radiation; /* 0 - 256 */
+    signed char radiation; /* -1 - 0 */
     int radition_vector; /* direction of radiation source */
 
 } sector;
