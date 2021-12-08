@@ -30,6 +30,7 @@ environment* env_new( int x_dim, int y_dim ) {
     environment* env = (environment*) calloc( 1, sizeof(environment) );
     env->x_dim = x_dim;
     env->y_dim = y_dim;
+    env->osc = 0;
 
     env->grid = (sector**) calloc( x_dim, sizeof(sector*) );
 
@@ -128,6 +129,7 @@ void env_run_iterations( environment* env, int iters ) {
         for ( int b = 0; b < env->population; ++b ) {
             brain_react( env->brains[b], env );
         }
+        env->osc += 0.5; /* advance oscillator */
     }
 }
 

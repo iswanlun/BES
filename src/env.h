@@ -43,6 +43,9 @@ typedef struct {
     /* population */
     int population;
 
+    /* oscillator constant */
+    float osc;
+
 } environment;
 
 /* create a new environment */
