@@ -1,3 +1,5 @@
+
+#include <stdlib.h>
 #include "neurons.h"
 #include "math.h"
 /* Floating point numbers are expensive: Neuton outputs should be between 0 and 1000 */
@@ -81,19 +83,45 @@ float large_neuron( float input ) {
     return tanhf( 1.1 * input );
 }
 
+// TODO : REWORK THIS TO ALSO MOVE IN THE DIRECTION 
+void move_in_direction( environment* env, brain* br, int dir ) {
+
+    sector* sec = NULL;
+
+    switch( dir ) {
+        case( 0   ):    if ( br->y_pos < (env->y_dim-1) ) {
+                            sec = &(env->grid[br->x_pos][br->y_pos+1]);
+                        }
+        case( 90  ):    if ( br->x_pos < (env->x_dim-1) ) {
+                            sec = &(env->grid[br->x_pos+1][br->y_pos]);
+                        }
+        case( 180 ):    if ( br->y_pos > 0 ) {
+                            sec = &(env->grid[br->x_pos][br->y_pos-1]);
+                        }
+        case( 270 ):    if ( br->x_pos > 0 ) {
+                            sec = &(env->grid[br->x_pos-1][br->y_pos]);
+                        }
+    }
+
+}
+
 /* motor neurons */
 void move_forward_back( environment* env, brain* br, float input ) {
 
     float norm = tanhf( input );
 
     if ( norm > FB_DRIVE ) {
+        move_in_direction( env, br, br->dir );
         
     } else if ( norm < -FB_DRIVE ) {
         
+        move_in_direction( env, br, ((br->dir + 180) % 360) );
     }
+}
+
+void move_right_left( environment* env, brain* br, int input ) {
 
 }
-void move_right_left( environment* env, brain* br, int input ) {}
 void move_random( environment* env, brain* br, int input ) {}
 void move_rotate( brain* br, int imput );
 
@@ -101,16 +129,16 @@ void move_rotate( brain* br, int imput );
 float neuron_sense( environment* env, brain* br, int8_t gene_index ) {
 
     switch( gene_index ) {
-        case( 0x1 ): return north_south( br );
-        case( 0x2 ): return east_west( br );
-        case( 0x3 ): return light_dark( env, br );
-        case( 0x4 ): return brightness( env, br );
-        case( 0x5 ): return cold_warm( env, br );
-        case( 0x6 ): return temp( env, br );
-        case( 0x7 ): return radiation( env, br );
-        case( 0x8 ): return radiation_vector( env, br );
-        case( 0x9 ): return slow_oscillator( env );
-        case( 0xA ): return fast_oscillator( env );
+        case( 0x0 ): return north_south( br );
+        case( 0x1 ): return east_west( br );
+        case( 0x2 ): return light_dark( env, br );
+        case( 0x3 ): return brightness( env, br );
+        case( 0x4 ): return cold_warm( env, br );
+        case( 0x5 ): return temp( env, br );
+        case( 0x6 ): return radiation( env, br );
+        case( 0x7 ): return radiation_vector( env, br );
+        case( 0x8 ): return slow_oscillator( env );
+        case( 0x9 ): return fast_oscillator( env );
     }
     return 0;
 }
