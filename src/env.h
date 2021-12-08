@@ -66,8 +66,11 @@ typedef struct {
     /* population */
     int population;
 
-    /* oscillator constant */
+    /* oscillator */
     float osc;
+
+    /* generation counter */
+    int gen;
 
 } environment;
 
@@ -93,7 +96,7 @@ void env_regenerate( environment* env );
 
 /* Runs the selected number of iterations constituting a single generation
  * or sub generation */
-void env_run_iterations( environment* env, int iters );
+void env_run_generation( environment* env, int iters );
 
 /* Free env and brain resources */
 void env_cleanup( environment* env );

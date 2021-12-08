@@ -3,6 +3,8 @@
 #include "spawn.h"
 #include "rand.h"
 #include "brain.h"
+#include "log.h"
+#include "string.h"
 
 void env_disperse( environment* env ) {
 
@@ -32,6 +34,7 @@ environment* env_new( int x_dim, int y_dim ) {
     env->x_dim = x_dim;
     env->y_dim = y_dim;
     env->osc = 0;
+    env->gen = 0;
 
     env->grid = (sector**) calloc( x_dim, sizeof(sector*) );
 
@@ -65,26 +68,24 @@ void env_select( environment* env, char (*select)(int, int) ) {
 }
 
 /* Differs from select in that select applies a sections criteria to individual
- * sectors, where as cull removes brains in non-surviving sectors. 
- * Culling removes brains from memory. */
+ * sectors, cull removes non surviving brains from memory. */
 int env_cull( environment* env ) {
-
-    for ( int i = 0; i < env->population; ++i ) {
-        env->brains[i] = NULL; /* clear brains list to prevent dangling refrences */
-    }
     
     int survivors = 0;
 
-    for ( int x = 0; x < env->x_dim; ++x ) {
-        for ( int y = 0; y < env->y_dim; ++y ) {
+    for ( int i = 0; i < env->population; ++i ) {
 
-            if ( env->grid[x][y].survive ) {
-                survivors++;
-            } else {
-                spawn_remove( env->grid[x][y].occupant );
-                env->grid[x][y].occupant = NULL;
-            }
+        int x = env->brains[i]->x_pos;
+        int y = env->brains[i]->y_pos;
+
+        if ( env->grid[x][y].survive ) {
+            survivors++;
+        } else {
+            spawn_remove( env->brains[i] );
+            env->brains[i] = NULL; /* remove dangling refrence in array to non survivor */
         }
+
+        env->grid[x][y].occupant = NULL; /* Remove all brains from occupied grid sectors */
     }
     return survivors;
 }
@@ -92,43 +93,49 @@ int env_cull( environment* env ) {
 /* Repopulate an environment after culling */
 void env_regenerate( environment* env ) {
 
+    int survivors = env_cull( env );
+    log_generation( env, survivors );
+    
+    brain* next_gen[env->population];
+
     /* calculate the number to create per survivor */
-    int per_parent = ( env->population / env_cull( env ) );
-    int pop_index = 0, secondary = 0;
+    int per_parent = ( env->population / survivors );
+    int next_index = 0, secondary = 0;
 
-    for ( int x = 0; x < env->x_dim; ++x ) {
-        for ( int y = 0; y < env->y_dim; ++y ) {
+    for ( int i = 0; i < env->population; ++i ) {
             
-            if ( env->grid[x][y].occupant != NULL ) {
+        if ( env->brains[i] != NULL ) {
 
-                if ( pop_index + per_parent > env->population ) {
-                    per_parent = env->population - pop_index;
-                }
-
-                for ( int i = 0; i < per_parent; ++i ) {
-                    env->brains[pop_index++] = spawn_breed( env->grid[x][y].occupant );
-                }
-
-                spawn_remove( env->grid[x][y].occupant );
-                env->grid[x][y].occupant = NULL;
+            if ( next_index + per_parent > env->population ) {
+                per_parent = env->population - next_index;
             }
+
+            for ( int i = 0; i < per_parent; ++i ) {
+                next_gen[next_index++] = spawn_breed( env->brains[i] );
+            }
+
+            spawn_remove( env->brains[i] );
+            env->brains[i] = NULL; /* remove dangling pointer in list */
         }
     }
 
-    while ( pop_index < env->population ) {
-        env->brains[pop_index++] = spawn_breed( env->brains[secondary++] );
+    while ( next_index < env->population ) {
+        next_gen[next_index++] = spawn_breed( next_gen[secondary++] );
     }
 
+    memcpy( env->brains, next_gen, (env->population * sizeof( uint32_t )) ); /* move values from stack to heap */
     env_disperse( env );
+    env->gen++;
 }
 
 /* Runs the selected number of iterations constituting a single generation
  * or sub generation */
-void env_run_iterations( environment* env, int iters ) {
+void env_run_generation( environment* env, int iters ) {
 
     for ( int i = 0; i < iters; ++i ) {
         for ( int b = 0; b < env->population; ++b ) {
             brain_react( env->brains[b], env );
+            log_itteration( env );
         }
         env->osc += 0.5; /* advance oscillator */
     }
