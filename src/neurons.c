@@ -86,23 +86,35 @@ float large_neuron( float input ) {
 // TODO : REWORK THIS TO ALSO MOVE IN THE DIRECTION 
 void move_in_direction( environment* env, brain* br, int dir ) {
 
-    sector* sec = NULL;
+    int x = 0, y = 0;
 
     switch( dir ) {
-        case( 0   ):    if ( br->y_pos < (env->y_dim-1) ) {
-                            sec = &(env->grid[br->x_pos][br->y_pos+1]);
-                        }
-        case( 90  ):    if ( br->x_pos < (env->x_dim-1) ) {
-                            sec = &(env->grid[br->x_pos+1][br->y_pos]);
-                        }
-        case( 180 ):    if ( br->y_pos > 0 ) {
-                            sec = &(env->grid[br->x_pos][br->y_pos-1]);
-                        }
-        case( 270 ):    if ( br->x_pos > 0 ) {
-                            sec = &(env->grid[br->x_pos-1][br->y_pos]);
-                        }
+        case( 0 ):      if ( br->y_pos < (env->y_dim-1) ) { y = 1; }
+                        break;
+
+        case( 90 ):     if ( br->x_pos < (env->x_dim-1) ) { x = 1; }
+                        break;
+
+        case( 180 ):    if ( br->y_pos > 0 ) { y = -1; }
+                        break;
+
+        case( 270 ):    if ( br->x_pos > 0 ) { x = -1; }
+                        break;
     }
 
+    if ( x | y ) {
+        
+        sector* sec = &(env->grid[br->x_pos + x][br->y_pos + y]);
+
+        if ( sec->occupant != NULL ) {
+
+            sec->occupant = br; /* claim the new sector */
+            env->grid[br->x_pos][br->y_pos].occupant = NULL; /* release the old sector */
+            
+            br->x_pos += x; /* update brain coordinates */
+            br->y_pos += y;
+        }
+    }
 }
 
 /* motor neurons */
@@ -114,7 +126,6 @@ void move_forward_back( environment* env, brain* br, float input ) {
         move_in_direction( env, br, br->dir );
         
     } else if ( norm < -FB_DRIVE ) {
-        
         move_in_direction( env, br, ((br->dir + 180) % 360) );
     }
 }
