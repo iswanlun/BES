@@ -26,7 +26,7 @@ typedef struct {
     int light_vector; /* direction of light source, degrees */
 
     signed char radiation; /* -1 - 0 */
-    int radition_vector; /* direction of radiation source */
+    int radiation_vector; /* direction of radiation source */
 
 } sector;
 

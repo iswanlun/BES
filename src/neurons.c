@@ -32,6 +32,7 @@ signed char vec_diff( int from, int to ) {
     }
     return diff / 180;
 }
+
 signed char light_dark( environment* env, brain* br ) {
     return vec_diff( br->dir, env->grid[br->x_pos][br->y_pos].light_vector );
 }
@@ -48,8 +49,17 @@ signed char temp( environment* env, brain* br ) {
     return env->grid[br->x_pos][br->y_pos].temp;
 }
 
-signed char radiation( environment* env, brain* br ) {}
-signed char oscillator( void ) {}
+signed char radiation_vec( environment* env, brain* br ) {
+    return vec_diff( br->dir, env->grid[br->x_pos][br->y_pos].radiation_vector );
+}
+
+signed char radiation( environment* env, brain* br ) {
+    return env->grid[br->x_pos][br->y_pos].radiation;
+}
+
+signed char oscillator( void ) {
+
+}
 
 /* cognition neurons */
 signed char small_neuron( int input ) {}
