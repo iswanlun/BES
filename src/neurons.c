@@ -1,8 +1,8 @@
 
 #include <stdlib.h>
+#include <math.h>
 #include "neurons.h"
-#include "math.h"
-/* Floating point numbers are expensive: Neuton outputs should be between 0 and 1000 */
+#include "rand.h"
 
 /* sense neurons */
 float north_south( brain* br ) {
@@ -103,7 +103,7 @@ void move_in_direction( environment* env, brain* br, int dir ) {
     }
 
     if ( x | y ) {
-        
+
         sector* sec = &(env->grid[br->x_pos + x][br->y_pos + y]);
 
         if ( sec->occupant != NULL ) {
@@ -130,11 +130,40 @@ void move_forward_back( environment* env, brain* br, float input ) {
     }
 }
 
-void move_right_left( environment* env, brain* br, int input ) {
+void move_right_left( environment* env, brain* br, float input ) {
 
+    float norm = tanhf( input );
+
+    if ( norm > LR_DRIVE ) {
+        move_in_direction( env, br, ((br->dir + 90) % 360) );
+
+    } else if ( norm < -LR_DRIVE ) {
+        move_in_direction( env, br, ((br->dir + 270) % 360) );
+    }
 }
-void move_random( environment* env, brain* br, int input ) {}
-void move_rotate( brain* br, int imput );
+
+void move_random( environment* env, brain* br, float input ) {
+
+    float norm = fabsf( tanhf( input ) );
+
+    if ( norm > RM_DRIVE ) {
+        
+        br->dir = ( br->dir + ( ( rand_next( 1 ) % 3 ) * 90 ) ) % 360;
+        move_in_direction( env, br, br->dir );
+    }
+}
+
+void move_rotate( brain* br, float input ) {
+    
+    float norm = tanhf( input );
+
+    if ( norm > RT_DRIVE ) {
+        br->dir = ( br->dir + 90 ) % 360;
+
+    } else if ( norm < -RT_DRIVE ) {
+        br->dir = ( br->dir + 270 ) % 360;
+    }
+}
 
 /* Get the value of the specified sense neuron */
 float neuron_sense( environment* env, brain* br, int8_t gene_index ) {
@@ -172,6 +201,7 @@ void neuron_motor( environment* env, brain* br, int8_t gene_index, int input ) {
         case( 0x0 ): return move_forward_back( env, br, input );
         case( 0x1 ): return move_right_left( env, br, input );
         case( 0x2 ): return move_random( env, br, input );
+        case( 0x3 ): return move_rotate( br, input );
     }
     return 0;
 }
