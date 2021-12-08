@@ -3,7 +3,7 @@
 /* Floating point numbers are expensive: Neuton outputs should be between 0 and 1000 */
 
 /* sense neurons */
-signed char north_south( environment* env, brain* br ) {
+signed char north_south( brain* br ) {
     
     switch ( br->dir ) {
         case( 0   ): return  1;
@@ -12,7 +12,7 @@ signed char north_south( environment* env, brain* br ) {
     return 0;
 }
 
-signed char east_west( environment* env, brain* br ) {
+signed char east_west( brain* br ) {
 
     switch ( br->dir ) {
         case( 90  ): return  1;
@@ -20,28 +20,34 @@ signed char east_west( environment* env, brain* br ) {
     }
     return 0;
 }
-signed char light_dark( environment* env, brain* br ) {
 
-    /* detirmine the difference between brain direction and light source */
+signed char vec_diff( int from, int to ) {
 
-    int diff = env->grid[br->x_pos][br->y_pos].light_vector - br->dir;
+    int diff = to - from;
     
     if ( diff > 180 ){
         diff = (diff - 360) * -1;
     } else if ( diff < -180 ) {
         diff += 360;
     }
-
     return diff / 180;
+}
+signed char light_dark( environment* env, brain* br ) {
+    return vec_diff( br->dir, env->grid[br->x_pos][br->y_pos].light_vector );
 }
 
 signed char brightness( environment* env, brain* br ) {
-
     return env->grid[br->x_pos][br->y_pos].light;
 }
 
-signed char cold_warm( environment* env, brain* br ) {}
-signed char temp( environment* env, brain* br ) {}
+signed char cold_warm( environment* env, brain* br ) {
+    return vec_diff( br->dir, env->grid[br->x_pos][br->y_pos].temp_vector );
+}
+
+signed char temp( environment* env, brain* br ) {
+    return env->grid[br->x_pos][br->y_pos].temp;
+}
+
 signed char radiation( environment* env, brain* br ) {}
 signed char oscillator( void ) {}
 
@@ -60,8 +66,8 @@ void move_rotate( brain* br, int imput );
 signed char neuron_sense( environment* env, brain* br, int8_t gene_index ) {
 
     switch( gene_index ) {
-        case( 0x0 ): return north_south( env, br );
-        case( 0x1 ): return east_west( env, br );
+        case( 0x0 ): return north_south( br );
+        case( 0x1 ): return east_west( br );
         case( 0x2 ): return light_dark( env, br );
         case( 0x3 ): return cold_warm( env, br );
         case( 0x4 ): return radiation( env, br );
