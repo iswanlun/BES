@@ -1,13 +1,36 @@
 #ifndef ENV_H
 #define ENV_H
 
-#include "brain.h"
+#include <stdint.h>
 
-/**
- * Env: Environment where brains will live.
- * Environment is a 2d grid divided into sectors where
- * each sector contains some world data and optionally
- */
+#define SENSE_COUNT 10
+#define COGNITION_COUNT 3
+#define MOTOR_COUNT 4
+
+typedef struct {
+
+    /* internal brain buffers */
+    float sense_input[SENSE_COUNT];
+    float cognition_input[COGNITION_COUNT];
+    float motor_input[MOTOR_COUNT];
+
+    uint32_t* raw_genome; /* Raw genome with full variations */
+    int raw_genome_len;
+
+    uint32_t* sense_n;       /* Genome, sense neuron pathways */
+    int sense_len;
+
+    uint32_t* cognition_n;   /* Genome, cognition neuron pathways */
+    int cognition_len;
+
+    /* world realitive data */  
+    int x_pos;
+    int y_pos;
+    
+    /* direction, degrees */
+    int dir;
+
+} brain;
 
 /* A sector is a single space in the environment which a single brain may occupy */
 typedef struct {

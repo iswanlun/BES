@@ -2,6 +2,7 @@
 #include "env.h"
 #include "spawn.h"
 #include "rand.h"
+#include "brain.h"
 
 void env_disperse( environment* env ) {
 

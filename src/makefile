@@ -1,8 +1,8 @@
 
 CC = gcc
 
-rand.o: rand.c rand.h
-	$(CC) $^ -c
+sim: *.c
+	$(CC) $^ -lm -o $@
 
 clean:
-	rm -f *.o
+	rm -f *.o *.h.gch

@@ -28,7 +28,7 @@ void fire_sense_neurons( brain* br, environment* env ) {
         uint8_t in = IN(g);
         uint8_t out = OUT(g);
         uint32_t weight = WEIGHT(g);
-        float* w = &weight;
+        float* w = (float*) &weight;
         
         if ( OUT_SRC(g) ) {
             br->motor_input[ out ] += ( *w * neuron_sense( env, br, in ) );
@@ -49,7 +49,7 @@ void warm_cognition_neurons( brain* br ) {
             uint8_t in = IN(g);
             uint8_t out = OUT(g);
             uint32_t weight = WEIGHT(g);
-            float* w = &weight;
+            float* w = (float*) &weight;
 
             br->cognition_input[ out ] += ( *w * neuron_cognition( in, br->cognition_input[ in ] ) );
         }   
@@ -67,7 +67,7 @@ void fire_cognition_neurons( brain* br ) {
             uint8_t in = IN(g);
             uint8_t out = OUT(g);
             uint32_t weight = WEIGHT(g);
-            float* w = &weight;
+            float* w = (float*) &weight;
 
             br->motor_input[ out ] += ( *w * neuron_cognition( in, br->cognition_input[ in ] ) );
         }   
@@ -87,9 +87,7 @@ void fire_motor_neurons( brain* br, environment* env ) {
 void brain_react( brain* br, environment* env ) {
 
     /* Clean old data out */
-    wipe_sense_buffer(br);
-    wipe_cognition_buffer(br);
-    wipe_motor_buffer(br);
+    wipe_buffers( br );
 
     /* fire sense neurons */
     fire_sense_neurons(br, env);

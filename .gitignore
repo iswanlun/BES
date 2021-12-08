@@ -1,4 +1,7 @@
-sites
+# Project specific
+src/sim
+
+# Prerequisites
 *.d
 
 # Object files

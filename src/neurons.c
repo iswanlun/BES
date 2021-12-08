@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <math.h>
 #include "neurons.h"
@@ -203,5 +202,4 @@ void neuron_motor( environment* env, brain* br, int8_t gene_index, int input ) {
         case( 0x2 ): return move_random( env, br, input );
         case( 0x3 ): return move_rotate( br, input );
     }
-    return 0;
 }

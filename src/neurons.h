@@ -1,13 +1,8 @@
 #ifndef NEURONS_H
 #define NEURONS_H
 
-#include "env.h"
-#include "brain.h"
 #include <stdint.h>
-
-#define SENSE_COUNT 10
-#define COGNITION_COUNT 3
-#define MOTOR_COUNT 4
+#include "env.h"
 
 #define FB_DRIVE 0.5
 #define LR_DRIVE 0.7

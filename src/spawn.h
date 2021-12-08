@@ -1,7 +1,7 @@
 #ifndef SPAWN_H
 #define SPAWN_H
 
-#include "brain.h"
+#include "env.h"
 
 /* Create a new brain with a fixed genome size */
 brain* spawn_new( int genome_size );

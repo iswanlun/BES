@@ -2,7 +2,8 @@
 #include <string.h>
 #include "spawn.h"
 #include "rand.h"
-#include "neurons.h"
+#include "env.h"
+#include "brain.h"
 
 #define MUTATION_FEQ 1000
 
