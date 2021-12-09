@@ -6,6 +6,8 @@
 #include "log.h"
 #include "string.h"
 
+#include <stdio.h>
+
 #define DEFAULT_GENOME 8
 
 void env_disperse( environment* env ) {
@@ -16,20 +18,28 @@ void env_disperse( environment* env ) {
 
     for (int i = 0; i < env->population; ++i ) {
 
-        int xy = rand_next( 1 );
-        int x = ( ( xy >> 16 ) % env->x_dim );
-        int y = ( ( xy & 0xFFFF ) % env->y_dim );
-        env->brains[i]->dir = ( xy % 4 ) * 90;
+        printf( "Brain: %d \n", i );
 
+        uint32_t xy = rand_next( 0 );
+        uint16_t x = ( ( xy >> 16 ) % env->x_dim );
+        uint16_t y = ( ( xy & 0xFFFF ) % env->y_dim );
+
+        printf( "\tyx: %d %d \n", x, y );
+        
         while ( env->grid[x][y].occupant != NULL ) {
-            log_msg("disperse conflict");
+            log_msg("\tdisperse conflict");
             x = ( (x + 2) % env->x_dim );
             y = ( (y + 1) % env->y_dim );
         }
 
+        printf( "\tPositions found.\n");
+
+        env->brains[i]->dir = ( xy % 4 ) * 90;
         env->brains[i]->x_pos = x;
         env->brains[i]->y_pos = y;
         env->grid[x][y].occupant = env->brains[i];
+
+        printf( "\t end of brain: %d \n", i );
     }
 
     log_msg("[end env_disperse]");
@@ -64,7 +74,6 @@ void env_populate( environment* env, int pop, int genome_size ) {
     env->brains = (brain**) calloc( pop, sizeof(brain*) );
 
     for( int i = 0; i < pop; ++i ) {
-
         env->brains[i] = spawn_new( genome_size );
     }
 

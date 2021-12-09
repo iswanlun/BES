@@ -147,7 +147,7 @@ void move_random( environment* env, brain* br, float input ) {
 
     if ( norm > RM_DRIVE ) {
         
-        br->dir = ( br->dir + ( ( rand_next( 1 ) % 3 ) * 90 ) ) % 360;
+        br->dir = ( br->dir + ( ( rand_next( 0 ) % 3 ) * 90 ) ) % 360;
         move_in_direction( env, br, br->dir );
     }
 }

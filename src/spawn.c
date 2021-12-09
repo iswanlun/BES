@@ -71,7 +71,7 @@ brain* spawn_new( int genome_size ) {
 
     for ( int i = 0; i < genome_size; ++i ) {
 
-        br->raw_genome[i] = rand_next( 1 );
+        br->raw_genome[i] = rand_next( 0 );
     }
 
     spawn_create_pathways( br );
@@ -88,10 +88,10 @@ brain* spawn_breed( brain* parent ) {
 
     memcpy( br->raw_genome, parent->raw_genome, ( parent->raw_genome_len * sizeof( uint32_t ) ) );
 
-    if ( ( rand_next( 1 ) % MUTATION_FEQ ) == 0 ) {
+    if ( ( rand_next( 0 ) % MUTATION_FEQ ) == 0 ) {
 
-        int steps = rand_next( 1 ) % parent->raw_genome_len;
-        int shift = rand_next( 1 ) % 32;
+        int steps = rand_next( 0 ) % parent->raw_genome_len;
+        int shift = rand_next( 0 ) % 32;
 
         br->raw_genome[steps] ^= (1 << shift); /* bit flip mutation */
     }

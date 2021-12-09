@@ -16,10 +16,9 @@ int main( int argc, char** argv ) { /* expects name of log file */
     iterations = 1, 
     width = 128, 
     length = 128, 
-    population = 1000, 
+    population = 100, 
     genome_size = 4, 
     threads = 1;
-    char* log_path;
 
     /* preform setup */
     if ( argc < 2 | log_init( argv[1] ) ) {
