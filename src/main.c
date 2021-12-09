@@ -6,7 +6,7 @@
 
 char east_selection( int x_dim, int y_dim ) {
 
-    return ( y_dim > 125 ) ? 1:0;
+    return ( x_dim > 64 ) ? 1:0;
 }
 
 int main( int argc, char** argv ) { /* expects name of log file */

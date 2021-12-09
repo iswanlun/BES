@@ -6,18 +6,23 @@
 #include "log.h"
 #include "string.h"
 
+#define DEFAULT_GENOME 8
+
 void env_disperse( environment* env ) {
+
+    log_msg("[env_disperse]");
 
     /* TODO: Randomly distribute brains in brain list into grid */
 
     for (int i = 0; i < env->population; ++i ) {
 
-        uint32_t xy = rand_next( 1 );
-        uint16_t x = ( ( xy >> 16 ) % env->x_dim );
-        uint16_t y = ( ( xy & 0xFFFF ) % env->y_dim );
+        int xy = rand_next( 1 );
+        int x = ( ( xy >> 16 ) % env->x_dim );
+        int y = ( ( xy & 0xFFFF ) % env->y_dim );
         env->brains[i]->dir = ( xy % 4 ) * 90;
 
         while ( env->grid[x][y].occupant != NULL ) {
+            log_msg("disperse conflict");
             x = ( (x + 2) % env->x_dim );
             y = ( (y + 1) % env->y_dim );
         }
@@ -26,9 +31,13 @@ void env_disperse( environment* env ) {
         env->brains[i]->y_pos = y;
         env->grid[x][y].occupant = env->brains[i];
     }
+
+    log_msg("[end env_disperse]");
 }
 
 environment* env_new( int x_dim, int y_dim ) {
+
+    log_msg("[env_new]");
 
     environment* env = (environment*) calloc( 1, sizeof(environment) );
     env->x_dim = x_dim;
@@ -42,10 +51,14 @@ environment* env_new( int x_dim, int y_dim ) {
         env->grid[x] = (sector*) calloc( y_dim, sizeof(sector) );
     }
     
+    log_msg("[end env_new]");
+
     return env;
 }
 
 void env_populate( environment* env, int pop, int genome_size ) {
+
+    log_msg("[env_populate]");
 
     env->population = pop;
     env->brains = (brain**) calloc( pop, sizeof(brain*) );
@@ -56,20 +69,27 @@ void env_populate( environment* env, int pop, int genome_size ) {
     }
 
     env_disperse( env );
+    log_msg("[end env_populate]");
 }
 
 void env_select( environment* env, char (*select)(int, int) ) {
+
+    log_msg("[env_select]");
     
     for ( int x = 0; x < env->x_dim; ++x ) {
         for ( int y = 0; y < env->y_dim; ++y ) {
             env->grid[x][y].survive = select(x,y);
         }
     }
+
+    log_msg("[end env_select]");  
 }
 
 /* Differs from select in that select applies a sections criteria to individual
  * sectors, cull removes non surviving brains from memory. */
 int env_cull( environment* env ) {
+
+    log_msg("[env_cull]");
     
     int survivors = 0;
 
@@ -87,14 +107,31 @@ int env_cull( environment* env ) {
 
         env->grid[x][y].occupant = NULL; /* Remove all brains from occupied grid sectors */
     }
+
+    log_msg("[end env_cull]");
     return survivors;
 }
 
 /* Repopulate an environment after culling */
 void env_regenerate( environment* env ) {
 
+    log_msg("[env_regenerate]");
+
     int survivors = env_cull( env );
     log_generation( env, survivors );
+
+    if ( survivors == 0 ) {
+        
+        log_sim_issue( "Brain extinction: No survivors in generation." );
+        
+        for ( int i = 0; i < env->population; ++i ) {
+            env->brains[i] = spawn_new( DEFAULT_GENOME );
+        }
+
+        env_disperse( env );
+        env->gen++;
+        return;
+    }
     
     brain* next_gen[env->population];
 
@@ -119,6 +156,8 @@ void env_regenerate( environment* env ) {
         }
     }
 
+    log_msg("env: finished breeding next gen");
+
     while ( next_index < env->population ) {
         next_gen[next_index++] = spawn_breed( next_gen[secondary++] );
     }
@@ -126,23 +165,32 @@ void env_regenerate( environment* env ) {
     memcpy( env->brains, next_gen, (env->population * sizeof( uint32_t )) ); /* move values from stack to heap */
     env_disperse( env );
     env->gen++;
+
+    log_msg("[end env_regenerate]");
 }
 
 /* Runs the selected number of iterations constituting a single generation
  * or sub generation */
 void env_run_generation( environment* env, int iters ) {
 
+    log_msg("[run_generation]");
+
     for ( int i = 0; i < iters; ++i ) {
         for ( int b = 0; b < env->population; ++b ) {
             brain_react( env->brains[b], env );
-            log_itteration( env );
         }
+        log_itteration( env );
         env->osc += 0.5; /* advance oscillator */
     }
+
+    log_msg("[end run_generation]");
 }
 
 /* Free env and brain resources */
 void env_cleanup( environment* env ) {
+
+    log_msg("[env_cleanup]");
+
 
     for ( int i = 0; i < env->population; ++i ) {
         spawn_remove( env->brains[i] );
@@ -154,4 +202,6 @@ void env_cleanup( environment* env ) {
         free( env->grid[x] );
     }
     free( env->grid );
+
+    log_msg("[end env_cleanup]");
 }

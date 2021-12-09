@@ -1,5 +1,6 @@
 # Project specific
 src/sim
+src/logfile
 
 # Prerequisites
 *.d
