@@ -33,6 +33,7 @@ void spawn_create_pathways( brain* br ) {
     /* create appropriate buffers */
     br->sense_n     = (uint32_t*) calloc( br->sense_len,     sizeof( uint32_t ) );
     br->cognition_n = (uint32_t*) calloc( br->cognition_len, sizeof( uint32_t ) );
+    
 
     int sense_index = 0, cog_index = 0;
 
@@ -86,7 +87,7 @@ brain* spawn_breed( brain* parent ) {
 
     br->raw_genome_len = parent->raw_genome_len;
 
-    memcpy( br->raw_genome, parent->raw_genome, ( parent->raw_genome_len * sizeof( uint32_t ) ) );
+    memcpy( br->raw_genome, parent->raw_genome, ( parent->raw_genome_len * sizeof(uint32_t) ) );
 
     if ( ( rand_next( 0 ) % MUTATION_FEQ ) == 0 ) {
 
@@ -95,6 +96,9 @@ brain* spawn_breed( brain* parent ) {
 
         br->raw_genome[steps] ^= (1 << shift); /* bit flip mutation */
     }
+
+    spawn_create_pathways( br );
+
     return br;
 }
 

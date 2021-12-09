@@ -6,8 +6,6 @@
 #include "log.h"
 #include "string.h"
 
-#include <stdio.h>
-
 #define DEFAULT_GENOME 8
 
 void env_disperse( environment* env ) {
@@ -18,28 +16,19 @@ void env_disperse( environment* env ) {
 
     for (int i = 0; i < env->population; ++i ) {
 
-        printf( "Brain: %d \n", i );
-
         uint32_t xy = rand_next( 0 );
         uint16_t x = ( ( xy >> 16 ) % env->x_dim );
         uint16_t y = ( ( xy & 0xFFFF ) % env->y_dim );
 
-        printf( "\tyx: %d %d \n", x, y );
-        
         while ( env->grid[x][y].occupant != NULL ) {
-            log_msg("\tdisperse conflict");
             x = ( (x + 2) % env->x_dim );
             y = ( (y + 1) % env->y_dim );
         }
-
-        printf( "\tPositions found.\n");
 
         env->brains[i]->dir = ( xy % 4 ) * 90;
         env->brains[i]->x_pos = x;
         env->brains[i]->y_pos = y;
         env->grid[x][y].occupant = env->brains[i];
-
-        printf( "\t end of brain: %d \n", i );
     }
 
     log_msg("[end env_disperse]");
@@ -129,7 +118,7 @@ void env_regenerate( environment* env ) {
     int survivors = env_cull( env );
     log_generation( env, survivors );
 
-    if ( survivors == 0 ) {
+    if ( 0 == survivors ) {
         
         log_sim_issue( "Brain extinction: No survivors in generation." );
         
@@ -145,18 +134,18 @@ void env_regenerate( environment* env ) {
     brain* next_gen[env->population];
 
     /* calculate the number to create per survivor */
-    int per_parent = ( env->population / survivors );
     int next_index = 0, secondary = 0;
+    int per_parent = ( env->population / survivors );
 
     for ( int i = 0; i < env->population; ++i ) {
-            
+           
         if ( env->brains[i] != NULL ) {
 
-            if ( next_index + per_parent > env->population ) {
+            if ( (next_index + per_parent) > env->population ) {
                 per_parent = env->population - next_index;
             }
 
-            for ( int i = 0; i < per_parent; ++i ) {
+            for ( int p = 0; p < per_parent; ++p ) {
                 next_gen[next_index++] = spawn_breed( env->brains[i] );
             }
 
@@ -171,7 +160,7 @@ void env_regenerate( environment* env ) {
         next_gen[next_index++] = spawn_breed( next_gen[secondary++] );
     }
 
-    memcpy( env->brains, next_gen, (env->population * sizeof( uint32_t )) ); /* move values from stack to heap */
+    memcpy( env->brains, next_gen, (env->population * sizeof(uint32_t*)) ); /* move values from stack to heap */
     env_disperse( env );
     env->gen++;
 
@@ -200,7 +189,6 @@ void env_cleanup( environment* env ) {
 
     log_msg("[env_cleanup]");
 
-
     for ( int i = 0; i < env->population; ++i ) {
         spawn_remove( env->brains[i] );
         env->brains[i] = NULL;
@@ -211,6 +199,8 @@ void env_cleanup( environment* env ) {
         free( env->grid[x] );
     }
     free( env->grid );
+
+    free( env );
 
     log_msg("[end env_cleanup]");
 }

@@ -42,6 +42,7 @@ int main( int argc, char** argv ) { /* expects name of log file */
 
     /* preform shutdown */
     env_cleanup( env );
+    rand_clean_up();
 
     return 0;
 }

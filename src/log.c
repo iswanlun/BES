@@ -16,14 +16,14 @@ int log_init( const char* log_path ) {
 void log_itteration( environment* env ) {
 
     FILE* fp = fopen( log, "a" );
-    fprintf( fp, "Single iter.\n" );
+    fprintf( fp, "[Itteration].\n" );
     fclose( fp );
 }
 
 void log_generation( environment* env, int survivors ) {
 
     FILE* fp = fopen( log, "a" );
-    fprintf( fp, " Generation %d stats: ", env->gen );
+    fprintf( fp, "Generation %d stats: \n", env->gen );
     fprintf( fp, " \tSurvivors: %d \n", survivors );
     fclose( fp );
 }
