@@ -16,7 +16,7 @@ int log_init( const char* log_path ) {
 void log_itteration( environment* env ) {
 
     FILE* fp = fopen( log, "a" );
-    fprintf( fp, "[Itteration].\n" );
+    fprintf( fp, "[Itteration]\n" );
     fclose( fp );
 }
 

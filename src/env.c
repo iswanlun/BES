@@ -177,7 +177,6 @@ void env_run_generation( environment* env, int iters ) {
         for ( int b = 0; b < env->population; ++b ) {
             brain_react( env->brains[b], env );
         }
-        log_itteration( env );
         env->osc += 0.5; /* advance oscillator */
     }
 

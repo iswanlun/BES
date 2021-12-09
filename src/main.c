@@ -1,4 +1,3 @@
-#include "stdio.h"
 #include "stdlib.h"
 #include "env.h"
 #include "rand.h"
@@ -6,18 +5,18 @@
 
 char east_selection( int x_dim, int y_dim ) {
 
-    return ( x_dim > 64 ) ? 1:0;
+    return ( y_dim > 64 ) ? 1:0;
 }
 
 int main( int argc, char** argv ) { /* expects name of log file */
 
     /* temp vars */
-    int generations = 1, 
-    iterations = 1, 
+    int generations = 200, 
+    iterations = 300, 
     width = 128, 
     length = 128, 
-    population = 100, 
-    genome_size = 4, 
+    population = 500, 
+    genome_size = 4,
     threads = 1;
 
     /* preform setup */
@@ -26,11 +25,11 @@ int main( int argc, char** argv ) { /* expects name of log file */
     }
 
     rand_init( threads );
-
     environment* env = env_new( width, length );
     env_populate( env, population, genome_size );
     env_select( env, &east_selection );
 
+    /* run a set of generations */
     for ( int i = 0; i < generations; ++i ) {
 
         /* run single generation, x number of iterations */
