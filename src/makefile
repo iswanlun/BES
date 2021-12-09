@@ -2,7 +2,7 @@
 CC = gcc
 
 sim: *.c
-	$(CC) $^ -lm -o $@
+	$(CC) $^ -lm -lgd -o $@
 
 clean:
 	rm -f *.o *.h.gch

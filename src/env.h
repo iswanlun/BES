@@ -30,6 +30,9 @@ typedef struct {
     /* direction, degrees */
     int dir;
 
+    /* color code */
+    int color;
+
 } brain;
 
 /* A sector is a single space in the environment which a single brain may occupy */

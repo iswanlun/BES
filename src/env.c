@@ -5,6 +5,7 @@
 #include "brain.h"
 #include "log.h"
 #include "string.h"
+#include "graphics.h"
 
 #define DEFAULT_GENOME 8
 
@@ -173,12 +174,18 @@ void env_run_generation( environment* env, int iters ) {
 
     log_msg("[run_generation]");
 
+    graphics_init("./gifs/");
+    graphics_start_gif( env, "gen_one" );
+    graphics_add_frame( env );
+
     for ( int i = 0; i < iters; ++i ) {
         for ( int b = 0; b < env->population; ++b ) {
             brain_react( env->brains[b], env );
         }
+        graphics_add_frame( env );
         env->osc += 0.5; /* advance oscillator */
     }
+    graphics_generate_gif();
 
     log_msg("[end run_generation]");
 }
