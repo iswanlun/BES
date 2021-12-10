@@ -6,7 +6,7 @@
 
 char east_selection( int x_dim, int y_dim ) {
 
-    return ( y_dim > 64 ) ? 1:0;
+    return ( x_dim > 100 ) ? 1:0;
 }
 
 int main( int argc, char** argv ) { /* expects name of log file */
@@ -16,8 +16,8 @@ int main( int argc, char** argv ) { /* expects name of log file */
     iterations = 180, 
     width = 128, 
     length = 128, 
-    population = 501, 
-    genome_size = 6,
+    population = 700, 
+    genome_size = 8,
     threads = 1;
 
     /* preform setup */

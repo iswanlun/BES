@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 
-#define MUTATION_FEQ 500
+#define MUTATION_FEQ 1000
 
 /* Remap the gene indices from 128 values to set limits  */
 #define TRIM(g, i, o) ( ( (((g >> 24) & 0x7F) % i) << 24 ) | \

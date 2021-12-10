@@ -8,9 +8,6 @@
                     ( (x & 0x1FFF) << 10) ) )
 
 void wipe_buffers( brain* br ) {
-    for ( int i = 0; i < SENSE_COUNT; ++i ) {
-        br->sense_input[i] = 0;
-    }
     for ( int i = 0; i < COGNITION_COUNT; ++i ) {
         br->cognition_input[i] = 0;
     }

@@ -22,6 +22,25 @@ float east_west( brain* br ) {
     return 0;
 }
 
+float is_blocked( environment* env, brain* br) {
+
+    int x = br->x_pos, y = br->y_pos;
+
+    switch ( br->dir ) {
+
+        case( 0   ): y++;
+        case( 90  ): x++;
+        case( 180 ): y--;
+        case( 270 ): x--;
+    }
+
+    if ( x < 0 || x > (env->x_dim-1) || y < 0 || y > (env->y_dim-1) ) {
+        return -1;
+    }
+
+    return (env->grid[x][y].occupant != NULL) ? 1:-1;
+}
+
 float vec_diff( int from, int to ) {
 
     int diff = to - from;
@@ -178,6 +197,7 @@ float neuron_sense( environment* env, brain* br, int8_t gene_index ) {
         case( 0x7 ): return radiation_vector( env, br );
         case( 0x8 ): return slow_oscillator( env );
         case( 0x9 ): return fast_oscillator( env );
+        case( 0xA ): return is_blocked( env, br );
     }
     return 0;
 }
@@ -194,7 +214,7 @@ float neuron_cognition( int8_t gene_index, float input ) {
 }
 
 /* Active the specified motor neuron */
-void neuron_motor( environment* env, brain* br, int8_t gene_index, int input ) {
+void neuron_motor( environment* env, brain* br, int8_t gene_index, float input ) {
 
     switch( gene_index ) {
         case( 0x0 ): return move_forward_back( env, br, input );

@@ -3,14 +3,13 @@
 
 #include <stdint.h>
 
-#define SENSE_COUNT 10
+#define SENSE_COUNT 11
 #define COGNITION_COUNT 3
 #define MOTOR_COUNT 4
 
 typedef struct _brain {
 
     /* internal brain buffers */
-    float sense_input[SENSE_COUNT];
     float cognition_input[COGNITION_COUNT];
     float motor_input[MOTOR_COUNT];
 
