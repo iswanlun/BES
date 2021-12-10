@@ -7,6 +7,8 @@
 #include "string.h"
 #include "graphics.h"
 
+#include <stdio.h>
+
 #define DEFAULT_GENOME 8
 
 void env_disperse( environment* env ) {
@@ -39,7 +41,7 @@ environment* env_new( int x_dim, int y_dim ) {
 
     log_msg("[env_new]");
 
-    environment* env = (environment*) calloc( 1, sizeof(environment) );
+    environment* env = (environment*) malloc( sizeof(environment) );
     env->x_dim = x_dim;
     env->y_dim = y_dim;
     env->osc = 0;
@@ -61,9 +63,17 @@ void env_populate( environment* env, int pop, int genome_size ) {
     log_msg("[env_populate]");
 
     env->population = pop;
-    env->brains = (brain**) calloc( pop, sizeof(brain*) );
+    env->brains = (brain**) malloc( pop * sizeof(brain*) );
+
+    printf("brain created\n");
+
+    for ( int i = 0; i < pop; ++i ) {
+        printf("Test touch %d\n", (int)env->brains[i] );
+    }
 
     for( int i = 0; i < pop; ++i ) {
+
+        printf("\t%d\n",i);
         env->brains[i] = spawn_new( genome_size );
     }
 

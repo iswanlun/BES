@@ -7,7 +7,7 @@
 #define COGNITION_COUNT 3
 #define MOTOR_COUNT 4
 
-typedef struct {
+typedef struct _brain {
 
     /* internal brain buffers */
     float sense_input[SENSE_COUNT];
@@ -36,7 +36,7 @@ typedef struct {
 } brain;
 
 /* A sector is a single space in the environment which a single brain may occupy */
-typedef struct {
+typedef struct _sector {
 
     brain* occupant; /* occupant */
 
@@ -56,7 +56,7 @@ typedef struct {
 
 } sector;
 
-typedef struct {
+typedef struct _environment {
 
     /* 2d world grid */
     sector** grid;

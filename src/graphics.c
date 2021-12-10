@@ -10,7 +10,7 @@
 
 static FILE* gif_fp;
 static const char* path;
-static gdImage* im_p, *im_c;
+static gdImage* im_p;
 
 static int tsp;
 static int img_x_dim;
@@ -38,18 +38,20 @@ void graphics_start_gif( environment* env, const char* fname ) {
     img_x_dim = (env->x_dim * IMG_SCALE);
     img_y_dim = (env->y_dim * IMG_SCALE);
 
-    im_p = gdImageCreate(img_x_dim, img_y_dim);
-    (void)gdImageColorAllocate(im_p, 255, 255, 255); /* white background */
-    tsp = gdImageColorAllocate(im_p, 1, 1, 1); /* allows transparent pixels */
-    gdImageGifAnimBegin( im_p, gif_fp, 1, 0 );
-    gdImageGifAnimAdd(im_p, gif_fp, 0, 0, 0, 0, 1, NULL);
+    printf(" img x dim: %d img y dim %d \n", img_x_dim, img_y_dim );
 
+    im_p = gdImageCreate(img_x_dim, img_y_dim);
+    gdImageColorAllocate(im_p, 255, 255, 255); /* white background */
+    tsp = gdImageColorAllocate(im_p, 1, 1, 1); /* allows transparent pixels */
+    
     for ( int i = 0; i < env->population; ++i ) {
 
         uint32_t fgene = env->brains[i]->raw_genome[0];
         env->brains[i]->color = gdImageColorAllocate( im_p, ((fgene>>24) & 0xFF), ((fgene>>16) & 0xFF), ((fgene>>8) & 0xFF) );
     }
 
+    gdImageGifAnimBegin( im_p, gif_fp, 1, 0 );
+    //gdImageGifAnimAdd(im_p, gif_fp, 0, 0, 0, 0, 1, NULL);
 }
 
 void graphics_add_frame( environment* env ) {
@@ -57,9 +59,10 @@ void graphics_add_frame( environment* env ) {
     printf("g_frame\n");
 
     /* Create and add new frame to gif */
-    im_c = gdImageCreate(img_x_dim, img_y_dim);
-    (void)gdImageColorAllocate(im_p, 255, 255, 255); /* white background */
+    gdImage* im_c = gdImageCreate(img_x_dim, img_y_dim);
+    gdImageColorAllocate( im_c, 255, 255, 255 );
     gdImagePaletteCopy(im_c, im_p);  // Make sure the palette is identical
+    gdImageColorTransparent( im_c, tsp );
 
     printf("preloop\n");
 
@@ -71,21 +74,10 @@ void graphics_add_frame( environment* env ) {
         gdImageFilledRectangle(im_c, x, y, x+(IMG_SCALE-1), y+(IMG_SCALE-1), env->brains[i]->color );
     }
 
-    printf("post loop\n");
-
-    gdImageColorTransparent( im_c, tsp );
-
-    printf("tsp fin.\n");
-
-    gdImageGifAnimAdd(im_c, gif_fp, 0, 0, 0, 100, 1, im_p);
-
-    printf(" im_c: %i  im_p: %i gif_fp: %i \n", (int)im_c, (int)im_p, (int)gif_fp );
-
-    printf("added\n");
+    gdImageGifAnimAdd(im_c, gif_fp, 0, 0, 0, 30, 3, NULL );
 
     gdImageDestroy(im_p);
     im_p = im_c;
-    im_c = NULL;
 }
 
 void graphics_generate_gif( void ) {

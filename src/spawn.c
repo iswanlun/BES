@@ -6,6 +6,8 @@
 #include "env.h"
 #include "brain.h"
 
+#include <stdio.h>
+
 #define MUTATION_FEQ 500
 
 /* Remap the gene indices from 128 values to set limits  */
@@ -65,8 +67,8 @@ void spawn_create_pathways( brain* br ) {
 
 brain* spawn_new( int genome_size ) {
 
-    brain* br = (brain*) calloc( 1, sizeof(brain) );
-    br->raw_genome = (uint32_t*) calloc( genome_size, sizeof(uint32_t) );
+    brain* br = (brain*) malloc( sizeof(brain) );
+    br->raw_genome = (uint32_t*) malloc( genome_size * sizeof(uint32_t) );
 
     br->raw_genome_len = genome_size;
 
