@@ -13,12 +13,14 @@ log.o: log.c log.h
 neurons.o: neurons.c neurons.h
 	$(CC) $^ -c
 
-sim: main.c brain.c brain.h env.c env.h spawn.c spawn.h graphics.o rand.o log.o neurons.o
+brain.o: brain.c brain.h
+	$(CC) $^ -c
+
+sim: main.c env.c env.h spawn.c spawn.h graphics.o rand.o log.o neurons.o brain.o
 	$(CC) $^ -g -lm -lgd -o $@
 
 clean:
 	rm -f *.o *.h.gch
-	rm ./sim
 	
 setup:
 	mkdir -p ./gifs

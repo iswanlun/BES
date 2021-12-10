@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <math.h>
 #include "env.h"
 #include "spawn.h"
 #include "rand.h"
@@ -6,8 +7,6 @@
 #include "log.h"
 #include "string.h"
 #include "graphics.h"
-
-#include <stdio.h>
 
 #define DEFAULT_GENOME 8
 
@@ -170,24 +169,42 @@ void env_regenerate( environment* env ) {
     log_msg("[end env_regenerate]");
 }
 
+int env_graphic_gen( int gen ) {
+
+    int r = (int)sqrt( gen );
+    int t = (r * r);
+
+    return ((t == gen) && (r & 0x1));
+}
+
 /* Runs the selected number of iterations constituting a single generation
  * or sub generation */
 void env_run_generation( environment* env, int iters ) {
 
     log_msg("[run_generation]");
 
-    graphics_init("./gifs/");
-    graphics_start_gif( env, "gen_one" );
-    graphics_add_frame( env );
+    if( env_graphic_gen( env->gen ) ) {
 
-    for ( int i = 0; i < iters; ++i ) {
-        for ( int b = 0; b < env->population; ++b ) {
-            brain_react( env->brains[b], env );
-        }
+        graphics_start_gif( env, "View" );
         graphics_add_frame( env );
-        env->osc += 0.5; /* advance oscillator */
+
+        for ( int i = 0; i < iters; ++i ) {
+            for ( int b = 0; b < env->population; ++b ) {
+                brain_react( env->brains[b], env );
+            }
+            graphics_add_frame( env );
+            env->osc += 0.5; /* advance oscillator */
+        }
+        graphics_generate_gif();
+
+    } else {
+        for ( int i = 0; i < iters; ++i ) {
+            for ( int b = 0; b < env->population; ++b ) {
+                brain_react( env->brains[b], env );
+            }
+            env->osc += 0.5; /* advance oscillator */
+        }
     }
-    graphics_generate_gif();
 
     log_msg("[end run_generation]");
 }

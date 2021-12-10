@@ -2,6 +2,7 @@
 #include "env.h"
 #include "rand.h"
 #include "log.h"
+#include "graphics.h"
 
 char east_selection( int x_dim, int y_dim ) {
 
@@ -11,7 +12,7 @@ char east_selection( int x_dim, int y_dim ) {
 int main( int argc, char** argv ) { /* expects name of log file */
 
     /* temp vars */
-    int generations = 20, 
+    int generations = 1000, 
     iterations = 180, 
     width = 128, 
     length = 128, 
@@ -20,7 +21,7 @@ int main( int argc, char** argv ) { /* expects name of log file */
     threads = 1;
 
     /* preform setup */
-    if ( argc < 2 | log_init( argv[1] ) ) {
+    if ( argc < 3 | log_init( argv[1] ) | graphics_init( argv[2] ) ) {
         exit(1);
     }
 
