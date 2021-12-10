@@ -4,8 +4,6 @@
 #include "graphics.h"
 #include "gd.h"
 
-#include <stdio.h>
-
 #define IMG_SCALE 4
 
 static FILE* gif_fp;
@@ -18,8 +16,6 @@ static int img_y_dim;
 
 int graphics_init( const char* path_name ) {
 
-    printf("g_init\n");
-
     path = path_name;
     struct stat st;
 
@@ -28,8 +24,6 @@ int graphics_init( const char* path_name ) {
 
 void graphics_start_gif( environment* env, const char* fname ) {
 
-    printf("g_start\n");
-
     /* open new file */
     char fpath[ strlen(path) + strlen(fname) ];
     sprintf( fpath, "%s%s_Gen_%d.gif", path, fname, env->gen );
@@ -37,8 +31,6 @@ void graphics_start_gif( environment* env, const char* fname ) {
 
     img_x_dim = (env->x_dim * IMG_SCALE);
     img_y_dim = (env->y_dim * IMG_SCALE);
-
-    printf(" img x dim: %d img y dim %d \n", img_x_dim, img_y_dim );
 
     im_p = gdImageCreate(img_x_dim, img_y_dim);
     gdImageColorAllocate(im_p, 255, 255, 255); /* white background */
@@ -56,15 +48,11 @@ void graphics_start_gif( environment* env, const char* fname ) {
 
 void graphics_add_frame( environment* env ) {
 
-    printf("g_frame\n");
-
     /* Create and add new frame to gif */
     gdImage* im_c = gdImageCreate(img_x_dim, img_y_dim);
     gdImageColorAllocate( im_c, 255, 255, 255 );
     gdImagePaletteCopy(im_c, im_p);  // Make sure the palette is identical
     gdImageColorTransparent( im_c, tsp );
-
-    printf("preloop\n");
 
     for ( int i = 0; i < env->population; ++i ) {
 
@@ -81,8 +69,6 @@ void graphics_add_frame( environment* env ) {
 }
 
 void graphics_generate_gif( void ) {
-
-    printf("img end\n");
 
     /* generate gif, dispose of all resources */
     gdImageGifAnimEnd( gif_fp );

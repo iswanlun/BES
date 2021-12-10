@@ -105,7 +105,7 @@ void move_in_direction( environment* env, brain* br, int dir ) {
 
         sector* sec = &(env->grid[br->x_pos + x][br->y_pos + y]);
 
-        if ( sec->occupant != NULL ) {
+        if ( sec->occupant == NULL ) {
 
             sec->occupant = br; /* claim the new sector */
             env->grid[br->x_pos][br->y_pos].occupant = NULL; /* release the old sector */

@@ -65,15 +65,7 @@ void env_populate( environment* env, int pop, int genome_size ) {
     env->population = pop;
     env->brains = (brain**) malloc( pop * sizeof(brain*) );
 
-    printf("brain created\n");
-
-    for ( int i = 0; i < pop; ++i ) {
-        printf("Test touch %d\n", (int)env->brains[i] );
-    }
-
     for( int i = 0; i < pop; ++i ) {
-
-        printf("\t%d\n",i);
         env->brains[i] = spawn_new( genome_size );
     }
 

@@ -1,6 +1,6 @@
 # Project specific
 src/sim
-src/logfile
+src/log
 src/gifs
 
 # Prerequisites
