@@ -34,7 +34,7 @@ If you want to use a pre-defined log file and output destination
 If not 
 > ./sim <path/to/logfile> <path/to/gif/folder/> 
 
-### Credit ###
+## Credit ##
 
 Inspired by David Randall Miller's project:  
 
