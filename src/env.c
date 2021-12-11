@@ -14,8 +14,6 @@ void env_disperse( environment* env ) {
 
     log_msg("[env_disperse]");
 
-    /* TODO: Randomly distribute brains in brain list into grid */
-
     for (int i = 0; i < env->population; ++i ) {
 
         uint32_t xy = rand_next( 0 );
@@ -174,7 +172,7 @@ int env_graphic_gen( int gen ) {
     int r = (int)sqrt( gen );
     int t = (r * r);
 
-    return ((t == gen) && (r & 0x1));
+    return ((t == gen) && ((r & 0x1) == 0));
 }
 
 /* Runs the selected number of iterations constituting a single generation
@@ -183,7 +181,7 @@ void env_run_generation( environment* env, int iters ) {
 
     log_msg("[run_generation]");
 
-    if( env_graphic_gen( env->gen ) ) {
+    if ( env_graphic_gen( env->gen ) ) {
 
         graphics_start_gif( env, "View" );
         graphics_add_frame( env );

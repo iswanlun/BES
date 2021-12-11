@@ -22,9 +22,9 @@ int graphics_init( const char* path_name ) {
     return ( stat(path, &st) | !S_ISDIR(st.st_mode) );
 }
 
+/* start a new gif animation */
 void graphics_start_gif( environment* env, const char* fname ) {
 
-    /* open new file */
     char fpath[ strlen(path) + strlen(fname) ];
     sprintf( fpath, "%s%s_Gen_%d.gif", path, fname, env->gen );
     gif_fp = fopen( fpath, "wb" );
@@ -43,15 +43,14 @@ void graphics_start_gif( environment* env, const char* fname ) {
     }
 
     gdImageGifAnimBegin( im_p, gif_fp, 1, 0 );
-    //gdImageGifAnimAdd(im_p, gif_fp, 0, 0, 0, 0, 1, NULL);
 }
 
+/* Create and add new frame to gif */
 void graphics_add_frame( environment* env ) {
 
-    /* Create and add new frame to gif */
     gdImage* im_c = gdImageCreate(img_x_dim, img_y_dim);
     gdImageColorAllocate( im_c, 255, 255, 255 );
-    gdImagePaletteCopy(im_c, im_p);  // Make sure the palette is identical
+    gdImagePaletteCopy(im_c, im_p);  /* Make sure the palette is identical */
     gdImageColorTransparent( im_c, tsp );
 
     for ( int i = 0; i < env->population; ++i ) {
@@ -63,16 +62,14 @@ void graphics_add_frame( environment* env ) {
     }
 
     gdImageGifAnimAdd(im_c, gif_fp, 0, 0, 0, 30, 3, NULL );
-
     gdImageDestroy(im_p);
     im_p = im_c;
 }
 
+/* generate gif, dispose of all resources */
 void graphics_generate_gif( void ) {
 
-    /* generate gif, dispose of all resources */
     gdImageGifAnimEnd( gif_fp );
     gdImageDestroy( im_p );
-    fclose( gif_fp );
-    
+    fclose( gif_fp );    
 }

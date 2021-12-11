@@ -101,7 +101,6 @@ float large_neuron( float input ) {
     return tanhf( 1.1 * input );
 }
 
-// TODO : REWORK THIS TO ALSO MOVE IN THE DIRECTION 
 void move_in_direction( environment* env, brain* br, int dir ) {
 
     int x = 0, y = 0;

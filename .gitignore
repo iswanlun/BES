@@ -3,6 +3,7 @@ src/sim
 src/log
 src/gifs
 *.txt
+results/
 
 # Prerequisites
 *.d
