@@ -12,12 +12,12 @@ char east_selection( int x_dim, int y_dim ) {
 int main( int argc, char** argv ) { /* expects name of log file */
 
     /* temp vars */
-    int generations = 1000, 
+    int generations = 500, 
     iterations = 180, 
     width = 128, 
     length = 128, 
     population = 700, 
-    genome_size = 8,
+    genome_size = 12,
     threads = 1;
 
     /* preform setup */

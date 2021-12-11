@@ -33,6 +33,7 @@ void spawn_create_pathways( brain* br ) {
     }
 
     /* create appropriate buffers */
+
     br->sense_n     = (uint32_t*) calloc( br->sense_len,     sizeof( uint32_t ) );
     br->cognition_n = (uint32_t*) calloc( br->cognition_len, sizeof( uint32_t ) );
     
@@ -56,10 +57,10 @@ void spawn_create_pathways( brain* br ) {
         } else {                        /* Sense source */
 
             if ( OUT_SRC( gene) ) {     /* motor out */
-                br->cognition_n[sense_index++] = TRIM( gene, SENSE_COUNT, MOTOR_COUNT );
+                br->sense_n[sense_index++] = TRIM( gene, SENSE_COUNT, MOTOR_COUNT );
 
             } else {                    /* cognition out */
-                br->cognition_n[sense_index++] = TRIM( gene, SENSE_COUNT, COGNITION_COUNT );
+                br->sense_n[sense_index++] = TRIM( gene, SENSE_COUNT, COGNITION_COUNT );
             }
         }
     }
