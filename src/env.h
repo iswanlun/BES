@@ -39,18 +39,16 @@ typedef struct _sector {
 
     brain* occupant; /* occupant */
 
-    // mutex
-
     /* sector data */
     char survive; /* sector selection criteria bool ( 0, 1 ) */
 
-    signed char temp; /* -1 - 0 */
+    float temp; /* -1 - 0 */
     int temp_vector; /* direction of heat source, degrees */
 
-    signed char light; /* -1 - 0 */
+    float light; /* -1 - 0 */
     int light_vector; /* direction of light source, degrees */
 
-    signed char radiation; /* -1 - 0 */
+    float radiation; /* -1 - 0 */
     int radiation_vector; /* direction of radiation source */
 
 } sector;
@@ -82,11 +80,6 @@ environment* env_new( int x_dim, int y_dim );
 /* populate the environment initally with new brains created at random
  * and disperse them throughout the env randomly */
 void env_populate( environment* env, int pop, int genome_size );
-
-/* apply a selection criteria realitive to world,
- * pointer to fuction which takes in coordinates and returns true / false
- * if coord survives */
-void env_select( environment* env, char (*select)(int, int) );
 
 /* Differs from select in that select applies a sections criteria to individual
  * sectors, where as cull removes brains in non-surviving sectors. 

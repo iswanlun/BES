@@ -14,9 +14,9 @@ static int tsp;
 static int img_x_dim;
 static int img_y_dim;
 
-int graphics_init( const char* path_name ) {
+int graphics_init( const char* gif_path ) {
 
-    path = path_name;
+    path = gif_path;
     struct stat st;
 
     return ( stat(path, &st) | !S_ISDIR(st.st_mode) );

@@ -3,22 +3,19 @@
 #include "rand.h"
 #include "log.h"
 #include "graphics.h"
-
-char east_selection( int x_dim, int y_dim ) {
-
-    return ( x_dim > 64 ) ? 1:0;
-}
+#include "selector.h"
 
 int main( int argc, char** argv ) { /* expects name of log file */
 
     /* temp vars */
-    int generations = 500, 
+    int generations = 1024, 
     iterations = 180, 
-    width = 128, 
-    length = 128, 
+    x_dim = 128, 
+    y_dim = 128, 
     population = 700, 
     genome_size = 12,
-    threads = 1;
+    threads = 1,
+    selector_type = 2;
 
     /* preform setup */
     if ( argc < 3 | log_init( argv[1] ) | graphics_init( argv[2] ) ) {
@@ -26,9 +23,9 @@ int main( int argc, char** argv ) { /* expects name of log file */
     }
 
     rand_init( threads );
-    environment* env = env_new( width, length );
+    environment* env = env_new( x_dim, y_dim );
     env_populate( env, population, genome_size );
-    env_select( env, &east_selection );
+    selector_init( env, selector_type );
 
     /* run a set of generations */
     for ( int i = 0; i < generations; ++i ) {
@@ -38,6 +35,8 @@ int main( int argc, char** argv ) { /* expects name of log file */
 
         /* perform natural selection and breed new generation, setup next environment */
         env_regenerate( env );
+
+        selector_update( env, selector_type );
     }
 
     /* preform shutdown */

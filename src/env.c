@@ -70,19 +70,6 @@ void env_populate( environment* env, int pop, int genome_size ) {
     log_msg("[end env_populate]");
 }
 
-void env_select( environment* env, char (*select)(int, int) ) {
-
-    log_msg("[env_select]");
-    
-    for ( int x = 0; x < env->x_dim; ++x ) {
-        for ( int y = 0; y < env->y_dim; ++y ) {
-            env->grid[x][y].survive = select(x,y);
-        }
-    }
-
-    log_msg("[end env_select]");  
-}
-
 /* Differs from select in that select applies a sections criteria to individual
  * sectors, cull removes non surviving brains from memory. */
 int env_cull( environment* env ) {
