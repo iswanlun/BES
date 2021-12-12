@@ -19,20 +19,22 @@ This project uses the libGD library to generate a gif represenation of generatio
 
 To install LibGD on Debian:
 
-> sudo apt install libgd-dev
+    sudo apt install libgd-dev
 
 ## Building and running ##
 
-> git clone https://github.com/iswanlun/evo_brains.git \
-> cd evo_brains/src \
-> make sim 
+    git clone https://github.com/iswanlun/evo_brains.git
+    cd evo_brains/src
+    make
 
-If you want to use a pre-defined log file and output destination 
-> make setup \
-> ./sim log gifs/ 
+If you want to use a pre-defined log file and output destination
 
-If not 
-> ./sim <path/to/logfile> <path/to/gif/folder/> 
+    make setup
+    ./sim log gifs/ 
+
+If not
+
+    ./sim <path/to/logfile> <path/to/gif/folder/> 
 
 ## Credit ##
 
