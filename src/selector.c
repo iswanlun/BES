@@ -6,10 +6,12 @@
 
 #include <stdio.h>
 
-#define RADIATION_MAX   0.3
+#define RADIATION_MAX  -0.2
 #define LIGHT_MIN       0.5
 #define TEMP_MIN       -0.3
 #define TEMP_MAX        0.25
+#define ABS_MIN        -2.0
+#define ABS_MAX         2.0
 #define RAD             57.295
 
 void eval_select_field( environment* env, size_t val, float min, float max ) {
@@ -75,15 +77,7 @@ void apply_source_field( environment* env, size_t val_off, size_t vec_off ) {
             
             *( (int*)   &(((char*)(&env->grid[x][y]))[vec_off]) ) = vec_field( x, y, px, py );
             *( (float*) &(((char*)(&env->grid[x][y]))[val_off]) ) = prox( x, y, px, py, env->x_dim, env->y_dim );
-
-            int f = *( (int*)   &(((char*)(&env->grid[x][y]))[vec_off]) );
-            float m = *( (float*) &(((char*)(&env->grid[x][y]))[val_off]) );
-
-            //printf(" %3i ", f );
-
         }
-
-        //printf("\n");
     }
 }
 
@@ -103,15 +97,15 @@ void selector_init( environment* env, int type ) {
 
         case( 2 ):      /* go towards the light */
             apply_source_field( env, offsetof(sector, light), offsetof(sector, light_vector) );
-            eval_select_field( env, offsetof(sector, light), LIGHT_MIN, 2 );
+            eval_select_field( env, offsetof(sector, light), LIGHT_MIN, ABS_MAX );
             break;
 
         case( 3 ):      /* stay away from radiation */
             apply_source_field( env, offsetof(sector, radiation), offsetof(sector, radiation_vector) );
-            eval_select_field( env, offsetof(sector, radiation), 0, RADIATION_MAX );
+            eval_select_field( env, offsetof(sector, radiation), ABS_MIN, RADIATION_MAX );
             break;
 
-        case( 4 ):      /* find the warm temp zone */
+        case( 4 ):      /* find the warm zone */
             apply_source_field( env, offsetof(sector, temp), offsetof(sector, temp_vector) );
             eval_select_field( env, offsetof(sector, temp), TEMP_MIN, TEMP_MAX );
             break;

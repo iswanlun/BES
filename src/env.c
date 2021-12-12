@@ -134,12 +134,12 @@ void env_regenerate( environment* env ) {
     env->gen++;
 }
 
-int env_graphic_gen( int gen ) {
+char env_graphic_gen( int gen ) {
 
     int r = (int)sqrt( gen );
     int t = (r * r);
 
-    return ((t == gen) && ((r & 0x1) == 0));
+    return (t == gen);
 }
 
 /* Runs the selected number of iterations constituting a single generation

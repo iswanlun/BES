@@ -15,7 +15,7 @@ int main( int argc, char** argv ) { /* expects name of log file */
     population = 1000, 
     genome_size = 12,
     threads = 1,
-    selector_type = 4;
+    selector_type = 3;
 
     /* preform setup */
     if ( argc < 3 | log_init( argv[1] ) | graphics_init( argv[2] ) ) {
