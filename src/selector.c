@@ -1,12 +1,15 @@
 #include <math.h>
 #include <stddef.h>
 #include "selector.h"
+#include "log.h"
 #include "rand.h"
+
+#include <stdio.h>
 
 #define RADIATION_MAX   0.3
 #define LIGHT_MIN       0.5
-#define TEMP_MIN       -0.3
-#define TEMP_MAX        0.6
+#define TEMP_MIN        -0.2
+#define TEMP_MAX        0.3
 #define RAD             57.295
 
 void eval_select_field( environment* env, size_t val, float min, float max ) {
@@ -35,8 +38,8 @@ void eval_select_limit( environment* env, int x_min, int y_min, int x_max, int y
 
 int vec_field( int x, int y, int px, int py ) {
 
-    int vx = (px - x) ? (px - x) : 1; /* no zeros */
-    int vy = py - y;
+    float vx = (px - x) ? (px - x) : 1.0; /* no zeros */
+    float vy = py - y;
 
     if ( vx > 0 ) {
         return 90 - (atan( vy / vx ) * RAD);
@@ -59,6 +62,10 @@ void apply_source_field( environment* env, size_t val_off, size_t vec_off ) {
     int px = rand_next(0) % env->x_dim;
     int py = rand_next(0) % env->y_dim;
 
+    char msg[40];
+    sprintf( msg, "[field point applied] px: %i py: %i", px, py );
+    log_msg( msg );
+
     for ( int x = 0; x < env->x_dim; ++x ) {
         for ( int y = 0; y < env->y_dim; ++y ) {
             
@@ -68,7 +75,11 @@ void apply_source_field( environment* env, size_t val_off, size_t vec_off ) {
             int f = *( (int*)   &(((char*)(&env->grid[x][y]))[vec_off]) );
             float m = *( (float*) &(((char*)(&env->grid[x][y]))[val_off]) );
 
+            //printf(" %3i ", f );
+
         }
+
+        //printf("\n");
     }
 }
 

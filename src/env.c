@@ -12,8 +12,6 @@
 
 void env_disperse( environment* env ) {
 
-    log_msg("[env_disperse]");
-
     for (int i = 0; i < env->population; ++i ) {
 
         uint32_t xy = rand_next( 0 );
@@ -30,13 +28,9 @@ void env_disperse( environment* env ) {
         env->brains[i]->y_pos = y;
         env->grid[x][y].occupant = env->brains[i];
     }
-
-    log_msg("[end env_disperse]");
 }
 
 environment* env_new( int x_dim, int y_dim ) {
-
-    log_msg("[env_new]");
 
     environment* env = (environment*) malloc( sizeof(environment) );
     env->x_dim = x_dim;
@@ -50,14 +44,10 @@ environment* env_new( int x_dim, int y_dim ) {
         env->grid[x] = (sector*) calloc( y_dim, sizeof(sector) );
     }
     
-    log_msg("[end env_new]");
-
     return env;
 }
 
 void env_populate( environment* env, int pop, int genome_size ) {
-
-    log_msg("[env_populate]");
 
     env->population = pop;
     env->brains = (brain**) malloc( pop * sizeof(brain*) );
@@ -67,15 +57,12 @@ void env_populate( environment* env, int pop, int genome_size ) {
     }
 
     env_disperse( env );
-    log_msg("[end env_populate]");
 }
 
 /* Differs from select in that select applies a sections criteria to individual
  * sectors, cull removes non surviving brains from memory. */
 int env_cull( environment* env ) {
 
-    log_msg("[env_cull]");
-    
     int survivors = 0;
 
     for ( int i = 0; i < env->population; ++i ) {
@@ -93,14 +80,11 @@ int env_cull( environment* env ) {
         env->grid[x][y].occupant = NULL; /* Remove all brains from occupied grid sectors */
     }
 
-    log_msg("[end env_cull]");
     return survivors;
 }
 
 /* Repopulate an environment after culling */
 void env_regenerate( environment* env ) {
-
-    log_msg("[env_regenerate]");
 
     int survivors = env_cull( env );
     log_generation( env, survivors );
@@ -141,8 +125,6 @@ void env_regenerate( environment* env ) {
         }
     }
 
-    log_msg("env: finished breeding next gen");
-
     while ( next_index < env->population ) {
         next_gen[next_index++] = spawn_breed( next_gen[secondary++] );
     }
@@ -150,8 +132,6 @@ void env_regenerate( environment* env ) {
     memcpy( env->brains, next_gen, (env->population * sizeof(uint32_t*)) ); /* move values from stack to heap */
     env_disperse( env );
     env->gen++;
-
-    log_msg("[end env_regenerate]");
 }
 
 int env_graphic_gen( int gen ) {
@@ -165,8 +145,6 @@ int env_graphic_gen( int gen ) {
 /* Runs the selected number of iterations constituting a single generation
  * or sub generation */
 void env_run_generation( environment* env, int iters ) {
-
-    log_msg("[run_generation]");
 
     if ( env_graphic_gen( env->gen ) ) {
 
@@ -190,8 +168,6 @@ void env_run_generation( environment* env, int iters ) {
             env->osc += 0.5; /* advance oscillator */
         }
     }
-
-    log_msg("[end run_generation]");
 }
 
 /* Free env and brain resources */
@@ -211,6 +187,4 @@ void env_cleanup( environment* env ) {
     free( env->grid );
 
     free( env );
-
-    log_msg("[end env_cleanup]");
 }

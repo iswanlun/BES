@@ -8,14 +8,14 @@
 int main( int argc, char** argv ) { /* expects name of log file */
 
     /* temp vars */
-    int generations = 1024, 
-    iterations = 180, 
+    int generations = 1025, 
+    iterations = 130, 
     x_dim = 128, 
     y_dim = 128, 
-    population = 700, 
+    population = 1000, 
     genome_size = 12,
     threads = 1,
-    selector_type = 2;
+    selector_type = 4;
 
     /* preform setup */
     if ( argc < 3 | log_init( argv[1] ) | graphics_init( argv[2] ) ) {

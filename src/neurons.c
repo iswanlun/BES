@@ -43,7 +43,7 @@ float is_blocked( environment* env, brain* br) {
 
 float vec_diff( int from, int to ) {
 
-    int diff = to - from;
+    float diff = to - from;
     
     if ( diff > 180 ){
         diff = (diff - 360) * -1;
