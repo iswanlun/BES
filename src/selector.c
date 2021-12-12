@@ -8,7 +8,7 @@
 
 #define RADIATION_MAX   0.3
 #define LIGHT_MIN       0.5
-#define TEMP_MIN        -0.2
+#define TEMP_MIN       -0.2
 #define TEMP_MAX        0.3
 #define RAD             57.295
 

@@ -1,6 +1,9 @@
 
 CC = gcc
 
+sim: main.c env.c env.h spawn.c spawn.h graphics.o rand.o log.o neurons.o brain.o selector.o
+	$(CC) $^ -g -lm -lgd -o $@
+
 graphics.o: graphics.c graphics.h
 	$(CC) $^ -c
 
@@ -18,9 +21,6 @@ brain.o: brain.c brain.h
 
 selector.o: selector.c selector.h
 	$(CC) $^ -c
-
-sim: main.c env.c env.h spawn.c spawn.h graphics.o rand.o log.o neurons.o brain.o selector.o
-	$(CC) $^ -g -lm -lgd -o $@
 
 clean:
 	rm -f *.o *.h.gch
