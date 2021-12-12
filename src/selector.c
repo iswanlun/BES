@@ -8,8 +8,8 @@
 
 #define RADIATION_MAX   0.3
 #define LIGHT_MIN       0.5
-#define TEMP_MIN       -0.2
-#define TEMP_MAX        0.3
+#define TEMP_MIN       -0.3
+#define TEMP_MAX        0.25
 #define RAD             57.295
 
 void eval_select_field( environment* env, size_t val, float min, float max ) {
@@ -51,10 +51,14 @@ float prox( int x, int y, int px, int py, int max_x, int max_y ) {
 
     int vx = px - x;
     int vy = py - y;
-    float max_v = sqrtf( pow(max_x, 2) + pow(max_y, 2) );
-    float act_v = sqrtf( pow(vx, 2) + pow(vy, 2) );
 
-    return 1.0 - ((act_v / max_v ) * 2.0);
+    float lim_v = sqrtf((max_x * max_x) + (max_y * max_y)) / 2.0;
+    float act_v = sqrtf((vx * vx) + (vy * vy));
+
+    float dst_u = act_v / lim_v; 
+    float dst_v = (dst_u > 1) ? 1:dst_u; 
+    
+    return 1.0 - (dst_v * 2.0);
 }
 
 void apply_source_field( environment* env, size_t val_off, size_t vec_off ) {

@@ -35,7 +35,7 @@ float is_blocked( environment* env, brain* br) {
     }
 
     if ( x < 0 || x > (env->x_dim-1) || y < 0 || y > (env->y_dim-1) ) {
-        return 0;
+        return 1;
     }
 
     return (env->grid[x][y].occupant != NULL) ? 1:0;
