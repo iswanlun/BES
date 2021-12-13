@@ -1,5 +1,5 @@
 
-# Brain evolution simulator #
+# Brain Evolution Simulator #
 
 ## About ##
 
@@ -23,7 +23,7 @@ To install LibGD on Debian:
 
 ## Building and running ##
 
-    git clone https://github.com/iswanlun/evo_brains.git
+    git clone https://github.com/iswanlun/BES.git
     cd evo_brains/src
     make
 
