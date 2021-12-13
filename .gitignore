@@ -1,9 +1,9 @@
 # Project specific
-src/sim
-src/log
-src/gifs
-*.txt
+sim
+log
+gifs/
 results/
+*.txt
 
 # Prerequisites
 *.d
