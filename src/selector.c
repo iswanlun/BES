@@ -1,10 +1,9 @@
 #include <math.h>
 #include <stddef.h>
+#include <stdio.h>
 #include "selector.h"
 #include "log.h"
 #include "rand.h"
-
-#include <stdio.h>
 
 #define RADIATION_MAX  -0.2
 #define LIGHT_MIN       0.5
@@ -21,7 +20,6 @@ void eval_select_field( environment* env, size_t val, float min, float max ) {
 
             sector* sect = &env->grid[x][y];
             float f = *( (float*) &(((char*)sect)[val]) );
-
             sect->survive = (f >= min && f < max) ? 1:0;
         }
     }
