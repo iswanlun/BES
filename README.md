@@ -24,7 +24,7 @@ To install LibGD on Debian:
 ## Building and running ##
 
     git clone https://github.com/iswanlun/BES.git
-    cd evo_brains/src
+    cd BES
     make
 
 If you want to use a pre-defined log file, settings file, and output destination
