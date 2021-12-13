@@ -5,7 +5,7 @@
 
 This simulator mimicks the evolution of organisms, here termed 'brains', by controling their thought processes through gene encoded pathways. Brains are controlled through wiring different neurons together and applying a weight to these connections to either amplify, suppress or invert neural pathways. Brains contain sense neurons to explore their environments, cognition neurons to modulate pathways, and motor neurons to interact with their environment. The simulation has distinct generations at the end of which brains are either culled if they do not meet some predefined criteria, or are allowed to reproduce. Brain reproduction comes with the possibility of mutation which allows brains to evolve traits over generations.
 
-## Gene Gtructure ##
+## Gene Structure ##
 
 Neural links are encoded via 32 bit genes which indicate how the pathways of a brain are formed. Each gene describes the source type, either a sensory neuron or cognition neuron, the specific neuron, an output type, either cognitive or motor, its specific destination, and the weight this connection will have.
 
@@ -27,14 +27,18 @@ To install LibGD on Debian:
     cd evo_brains/src
     make
 
-If you want to use a pre-defined log file and output destination
+If you want to use a pre-defined log file, settings file, and output destination
 
     make setup
-    ./sim log gifs/ 
 
-If not
+If not, in settings.conf under the paths section change:
 
-    ./sim <path/to/logfile> <path/to/gif/folder/> 
+    graphics=<path/to/gif/directory/>
+    log=<path/to/log/file>
+
+Run with
+
+    ./sim settings.conf 
 
 ## Credit ##
 

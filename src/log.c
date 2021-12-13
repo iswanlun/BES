@@ -1,41 +1,34 @@
-
 #include <stdio.h>
 #include <unistd.h>
 #include "log.h"
 
-#define DEBUG 1
-
-static const char* log;
+static FILE* log_fp;
 
 int log_init( const char* log_path ) {
 
-    log = log_path;
-    return access( log, ( R_OK | W_OK ) );
+    if ( access(log_path, ( R_OK | W_OK )) )  {
+        return 1;
+    }
+    log_fp = fopen( log_path, "a" );
+    return 0;
 }
 
 void log_itteration( environment* env ) {
 
-    FILE* fp = fopen( log, "a" );
-    fprintf( fp, "[Itteration]\n" );
-    fclose( fp );
+    fprintf( log_fp, "[Itteration]\n" );
 }
 
 void log_generation( environment* env, int survivors ) {
 
-    FILE* fp = fopen( log, "a" );
-    fprintf( fp, "Generation %d stats: \n", env->gen );
-    fprintf( fp, " \tSurvivors: %d \n", survivors );
-    fclose( fp );
-}
-
-void log_sim_issue( const char* err ) {
-    FILE* fp = fopen( log, "a" );
-    fprintf( fp, "%s\n", err );
-    fclose( fp );
+    fprintf( log_fp, "Generation %d stats: \n", env->gen );
+    fprintf( log_fp, "\tSurvivors: %d \n", survivors );
 }
 
 void log_msg( const char* msg ) {
-#ifdef DEBUG
-    log_sim_issue( msg );
-#endif
+
+    fprintf( log_fp, "%s\n", msg );
+}
+
+void log_teardown( void ) {
+    fclose( log_fp );
 }

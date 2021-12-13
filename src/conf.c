@@ -6,9 +6,11 @@
 
 static FILE* conf_fp;
 
-int conf_section( char* buf, const char* section ) {
+int conf_section( char* buf, size_t len, const char* section ) {
 
     int n = strlen( section );
+    if ( len < n+2 ) { return 0; }
+
     return ( buf[0] == '[' && buf[n+1] == ']' && !strncmp( &buf[1], section, n ) );
 }
 
@@ -46,7 +48,7 @@ void* conf_read( char** buf_ptr, const char* section, const char* key ) {
         if ( buf[i] == '\0' || buf[i] == '#' ) { continue; }
 
         if ( !sec ) {
-            sec = conf_section( &buf[i], section );
+            sec = conf_section( &buf[i], read, section );
         
         } else if ( conf_key( &buf[i], key, &i, &sec ) ) {
             return (void*) &buf[i];
@@ -104,6 +106,6 @@ void conf_init( const char* path ) {
     conf_fp = fopen( path, "r" );
 }
 
-void conf_close( void ) {
+void conf_teardown( void ) {
     fclose( conf_fp );
 }

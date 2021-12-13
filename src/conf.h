@@ -3,7 +3,7 @@
 
 void conf_init( const char* path );
 
-void conf_close( void );
+void conf_teardown( void );
 
 char* conf_string( const char* section, const char* key );
 

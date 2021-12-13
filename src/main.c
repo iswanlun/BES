@@ -13,7 +13,6 @@ int main( int argc, char** argv ) { /* expects name of log file */
         exit(1);
     }
 
-    rand_init( 1 );
     environment* env = env_new( main_cfg.x_dim, main_cfg.y_dim );
     env_populate( env, main_cfg.population, main_cfg.genome_size );
     selector_init( env, main_cfg.selector_type );
@@ -32,7 +31,6 @@ int main( int argc, char** argv ) { /* expects name of log file */
 
     /* preform shutdown */
     env_teardown( env );
-    rand_teardown();
     setup_teardown();
 
     return 0;

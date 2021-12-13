@@ -4,6 +4,7 @@
 #include "conf.h"
 #include "graphics.h"
 #include "log.h"
+#include "rand.h"
 
 config_main main_cfg;
 config_select select_cfg;
@@ -11,18 +12,21 @@ config_select select_cfg;
 static char* graphics_path;
 static char* log_path;
 
-int setup_init( char* config_ini ) {
+int setup_init( char* config ) {
 
-    if ( access( config_ini, R_OK ) ) {
+    if ( access( config, R_OK ) ) {
+        log_msg("[init] Config file: Access denied.");
         return 1;
     }
 
-    conf_init( config_ini );
+    conf_init( config );
+    rand_init( 1 );
 
     graphics_path = conf_string("paths", "graphics");
     log_path = conf_string("paths", "log");
 
     if ( log_init( log_path ) | graphics_init( graphics_path ) ) {
+        log_msg("[init] Paths: Path to log file or gif directory invalid. ");
         return 1;
     }
 
@@ -39,11 +43,13 @@ int setup_init( char* config_ini ) {
     select_cfg.temp_min = conf_float("selector","temp_min");
     select_cfg.temp_max = conf_float("selector","temp_max");
 
-    conf_close();
+    conf_teardown();
+    free( log_path );
     return 0;
 }
 
 void setup_teardown( void ) {
     free( graphics_path );
-    free( log_path );
+    log_teardown();
+    rand_teardown();
 }

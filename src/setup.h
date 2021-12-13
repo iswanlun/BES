@@ -25,7 +25,7 @@ typedef struct _config_select {
 extern config_main main_cfg;
 extern config_select select_cfg;
 
-int setup_init( char* config_ini );
+int setup_init( char* config );
 
 void setup_teardown( void );
 

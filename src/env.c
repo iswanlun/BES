@@ -91,7 +91,7 @@ void env_regenerate( environment* env ) {
 
     if ( 0 == survivors ) {
         
-        log_sim_issue( "Brain extinction: No survivors in generation." );
+        log_msg( "Brain extinction: No survivors in generation." );
         
         for ( int i = 0; i < env->population; ++i ) {
             env->brains[i] = spawn_new( DEFAULT_GENOME );
