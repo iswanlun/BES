@@ -35,6 +35,6 @@ uint32_t rand_next( int thread ) {
     return seeds[thread].w;
 }
 
-void rand_clean_up( void ) {
+void rand_teardown( void ) {
     free( seeds );
 }

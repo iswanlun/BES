@@ -1,26 +1,13 @@
 
 CC = gcc
 
-sim: main.c env.c env.h spawn.c spawn.h graphics.o rand.o log.o neurons.o brain.o selector.o
+sim: main.c env.o spawn.o graphics.o rand.o log.o neurons.o brain.o selector.o setup.o conf.o
 	$(CC) $^ -g -lm -lgd -o $@
 
-graphics.o: graphics.c graphics.h
+%.o: %.c %.h
 	$(CC) $^ -c
 
-rand.o: rand.c rand.h
-	$(CC) $^ -c
-
-log.o: log.c log.h
-	$(CC) $^ -c
-
-neurons.o: neurons.c neurons.h
-	$(CC) $^ -c
-
-brain.o: brain.c brain.h
-	$(CC) $^ -c
-
-selector.o: selector.c selector.h
-	$(CC) $^ -c
+.PHONY: clean setup
 
 clean:
 	rm -f *.o *.h.gch

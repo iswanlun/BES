@@ -30,15 +30,17 @@ int conf_key( char* buf, const char* key, int* offset, int* reset ) {
     return 0;
 }
 
-void* conf_read( char* buf, size_t len, const char* section, const char* key ) {
+void* conf_read( char** buf_ptr, const char* section, const char* key ) {
 
     fseek( conf_fp, 0, SEEK_SET );
-    ssize_t read;
+    ssize_t read, len = 0;
     int sec = 0;
 
-    while ( (read = getline( &buf, &len, conf_fp )) > -1 ) {
+    while ( (read = getline( buf_ptr, &len, conf_fp )) > -1 ) {
 
+        char* buf = *buf_ptr;
         int i = -1;
+
         while( isspace(buf[++i]) );
 
         if ( buf[i] == '\0' || buf[i] == '#' ) { continue; }
@@ -55,52 +57,46 @@ void* conf_read( char* buf, size_t len, const char* section, const char* key ) {
 
 float conf_float( const char* section, const char* key ) {
 
-    size_t len = 25;
-    char* buf = (char*) malloc( len * sizeof(char) );
-
-    void* fptr = conf_read( buf, len, section, key );
+    char* buf = NULL, **buf_ptr = &buf;
     float result = 0;
+    void* fptr = conf_read( buf_ptr, section, key );
 
     if ( fptr ) {
         result = atof( fptr );
     }
 
-    free( buf );
+    free( *buf_ptr );
     return result;
 }
 
 int conf_int( const char* section, const char* key ) {
 
-    size_t len = 25;
-    char* buf = (char*) malloc( len * sizeof(char) );
-
-    void* fptr = conf_read( buf, len, section, key );
+    char* buf = NULL, **buf_ptr = &buf;
     int result = 0;
+    void* fptr = conf_read( buf_ptr, section, key );
 
     if ( fptr ) {
         result = atoi( fptr );
     }
 
-    free( buf );
+    free( *buf_ptr );
     return result;
 }
 
 char* conf_string( const char* section, const char* key ) {
 
-    size_t len = 25;
-    char* buf = (char*) malloc( len * sizeof(char) );
-
-    void* sptr = conf_read( buf, len, section, key );
+    char* buf = NULL, **buf_ptr = &buf;
     char* result = NULL;
+    void* sptr = conf_read( buf_ptr, section, key );
 
     if ( sptr ) {
         int n = strlen( sptr );
-        result = (char*) malloc( n+1 * sizeof(char) );
-        result[n] = '\0';
+        result = (char*) malloc( n * sizeof(char) );
         strncpy(result, sptr, n);
+        result[n-1] = '\0';
     }
 
-    free( buf );
+    free( *buf_ptr );
     return result;
 }
 

@@ -171,7 +171,7 @@ void env_run_generation( environment* env, int iters ) {
 }
 
 /* Free env and brain resources */
-void env_cleanup( environment* env ) {
+void env_teardown( environment* env ) {
 
     log_msg("[env_cleanup]");
 

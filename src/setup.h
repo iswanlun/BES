@@ -22,9 +22,11 @@ typedef struct _config_select {
 
 } config_select;
 
-int setup_init( char* config_ini );
-
 extern config_main main_cfg;
 extern config_select select_cfg;
+
+int setup_init( char* config_ini );
+
+void setup_teardown( void );
 
 #endif

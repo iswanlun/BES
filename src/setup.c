@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <stdlib.h>
 #include "setup.h"
 #include "conf.h"
 #include "graphics.h"
@@ -6,6 +7,9 @@
 
 config_main main_cfg;
 config_select select_cfg;
+
+static char* graphics_path;
+static char* log_path;
 
 int setup_init( char* config_ini ) {
 
@@ -15,8 +19,8 @@ int setup_init( char* config_ini ) {
 
     conf_init( config_ini );
 
-    char* graphics_path = conf_string("paths", "graphics");
-    char* log_path = conf_string("paths", "log");
+    graphics_path = conf_string("paths", "graphics");
+    log_path = conf_string("paths", "log");
 
     if ( log_init( log_path ) | graphics_init( graphics_path ) ) {
         return 1;
@@ -35,5 +39,11 @@ int setup_init( char* config_ini ) {
     select_cfg.temp_min = conf_float("selector","temp_min");
     select_cfg.temp_max = conf_float("selector","temp_max");
 
+    conf_close();
     return 0;
+}
+
+void setup_teardown( void ) {
+    free( graphics_path );
+    free( log_path );
 }

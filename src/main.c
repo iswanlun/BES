@@ -9,7 +9,7 @@
 int main( int argc, char** argv ) { /* expects name of log file */
 
     /* preform setup */
-    if ( config_init( argv[1] ) ) {
+    if ( setup_init( argv[1] ) ) {
         exit(1);
     }
 
@@ -31,8 +31,9 @@ int main( int argc, char** argv ) { /* expects name of log file */
     }
 
     /* preform shutdown */
-    env_cleanup( env );
-    rand_clean_up();
+    env_teardown( env );
+    rand_teardown();
+    setup_teardown();
 
     return 0;
 }
