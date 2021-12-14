@@ -7,6 +7,7 @@
 
 #define RADIATION_MAX  -0.2
 #define LIGHT_MIN       0.5
+#define LIGHT_MAX      -0.5
 #define TEMP_MIN       -0.3
 #define TEMP_MAX        0.25
 #define ABS_MIN        -2.0
@@ -25,6 +26,18 @@ void eval_select_field( environment* env, size_t val, float min, float max ) {
     }
 }
 
+void eval_select_add_field( environment* env, size_t val, float min, float max ) {
+    
+    for ( int x = 0; x < env->x_dim; ++x ) {
+        for ( int y = 0; y < env->y_dim; ++y ) {
+
+            sector* sect = &env->grid[x][y];
+            float f = *( (float*) &(((char*)sect)[val]) );
+            sect->survive |= (f >= min && f < max) ? 1:0;
+        }
+    }
+}
+
 void eval_select_limit( environment* env, int x_min, int y_min, int x_max, int y_max ) {
     
     for ( int x = 0; x < env->x_dim; ++x ) {
@@ -38,7 +51,7 @@ void eval_select_limit( environment* env, int x_min, int y_min, int x_max, int y
 
 int vec_field( int x, int y, int px, int py ) {
 
-    float vx = (px - x) ? (px - x) : 1.0; /* no zeros */
+    float vx = (px - x) ? (px - x) : 0.01; /* no zeros */
     float vy = py - y;
 
     if ( vx > 0 ) {
@@ -107,6 +120,11 @@ void selector_init( environment* env, int type ) {
             apply_source_field( env, offsetof(sector, temp), offsetof(sector, temp_vector) );
             eval_select_field( env, offsetof(sector, temp), TEMP_MIN, TEMP_MAX );
             break;
+
+        case( 5 ):      /* Avoid a band of light */
+            apply_source_field( env, offsetof(sector, light), offsetof(sector, light_vector) );
+            eval_select_field( env, offsetof(sector, light), LIGHT_MIN, ABS_MAX );
+            eval_select_add_field( env, offsetof(sector, light), ABS_MIN, LIGHT_MAX );
     }
 }
 
