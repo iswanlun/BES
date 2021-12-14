@@ -40,6 +40,7 @@ int setup_init( char* config ) {
 
     select_cfg.radiation_max = conf_float("selector","radiation_max");
     select_cfg.light_min = conf_float("selector","light_min");
+    select_cfg.light_max = conf_float("selector", "light_max");
     select_cfg.temp_min = conf_float("selector","temp_min");
     select_cfg.temp_max = conf_float("selector","temp_max");
 

@@ -4,12 +4,8 @@
 #include "selector.h"
 #include "log.h"
 #include "rand.h"
+#include "setup.h"
 
-#define RADIATION_MAX  -0.2
-#define LIGHT_MIN       0.5
-#define LIGHT_MAX      -0.5
-#define TEMP_MIN       -0.3
-#define TEMP_MAX        0.25
 #define ABS_MIN        -2.0
 #define ABS_MAX         2.0
 #define RAD             57.295
@@ -108,23 +104,23 @@ void selector_init( environment* env, int type ) {
 
         case( 2 ):      /* go towards the light */
             apply_source_field( env, offsetof(sector, light), offsetof(sector, light_vector) );
-            eval_select_field( env, offsetof(sector, light), LIGHT_MIN, ABS_MAX );
+            eval_select_field( env, offsetof(sector, light), select_cfg.light_min, ABS_MAX );
             break;
 
         case( 3 ):      /* stay away from radiation */
             apply_source_field( env, offsetof(sector, radiation), offsetof(sector, radiation_vector) );
-            eval_select_field( env, offsetof(sector, radiation), ABS_MIN, RADIATION_MAX );
+            eval_select_field( env, offsetof(sector, radiation), ABS_MIN, select_cfg.radiation_max );
             break;
 
         case( 4 ):      /* find the warm zone */
             apply_source_field( env, offsetof(sector, temp), offsetof(sector, temp_vector) );
-            eval_select_field( env, offsetof(sector, temp), TEMP_MIN, TEMP_MAX );
+            eval_select_field( env, offsetof(sector, temp), select_cfg.temp_min, select_cfg.temp_max );
             break;
 
         case( 5 ):      /* Avoid a band of light */
             apply_source_field( env, offsetof(sector, light), offsetof(sector, light_vector) );
-            eval_select_field( env, offsetof(sector, light), LIGHT_MIN, ABS_MAX );
-            eval_select_add_field( env, offsetof(sector, light), ABS_MIN, LIGHT_MAX );
+            eval_select_field( env, offsetof(sector, light), select_cfg.light_min, ABS_MAX );
+            eval_select_add_field( env, offsetof(sector, light), ABS_MIN, select_cfg.light_max );
     }
 }
 

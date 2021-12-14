@@ -17,6 +17,7 @@ typedef struct _config_select {
 
     float radiation_max,
     light_min,
+    light_max,
     temp_min,
     temp_max;
 
