@@ -75,10 +75,10 @@ int conf_int( const char* section, const char* key ) {
 
     char* buf = NULL, **buf_ptr = &buf;
     int result = 0;
-    void* fptr = conf_read( buf_ptr, section, key );
+    void* iptr = conf_read( buf_ptr, section, key );
 
-    if ( fptr ) {
-        result = atoi( fptr );
+    if ( iptr ) {
+        result = atoi( iptr );
     }
 
     free( *buf_ptr );

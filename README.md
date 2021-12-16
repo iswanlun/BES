@@ -40,6 +40,10 @@ Run with
 
     ./sim settings.conf 
 
+## Notes on running simulations ##
+
+A great many outcomes are possible with this simulator including many unsatisfactory or uninteresting outcomes. For each type of selection mechanism there is a sweet spot for making the simulator generate interesting results. To little evolutionary pressure, say by making survival zones to large or by allowing too many iterations will generate lethargic and unintesting brains. Too much pressure and generations get wiped out frequently and brains never reach maturity. The brains are remarkably resilliant despite their limits, but hostile or poorly configured environments can waste computational resources.
+
 ## Credit ##
 
 Inspired by David Randall Miller's project:  
