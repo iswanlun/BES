@@ -50,3 +50,17 @@ Inspired by David Randall Miller's project:
 
 https://www.youtube.com/watch?v=N3tRFayqVtk \
 https://github.com/davidrmiller/biosim4
+
+## Example Outcomes ##
+
+Generation 225 finding a warm region.
+
+![alt text](https://s8.gifyu.com/images/Gen_225_finding_warm_region.gif "Generation 225 finding a warm region")
+
+Generation 144 finding a light source.
+
+![alt text](https://s8.gifyu.com/images/goto_light5837_Gen_144.gif "Generation 144 finding a light source")
+
+Generation 121 heading east.
+
+![alt text](https://s8.gifyu.com/images/View_Gen_121.gif "Generation 121 heading east")
